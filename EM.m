@@ -17,6 +17,11 @@ pi_j = ones(1, p); % row vector, because we treat j as the 2nd dimension
 sigma = 1;
 SIGMA = repmat(reshape(eye(dim),[1 1 dim dim]),[1 p 1 1]) * sigma^2;
 
+% Plot initial values
+hold off
+scatter(x(:,1),x(:,2))
+hold on
+
 %% EM Iteration
 for step=1:max_steps
     %% E-step
@@ -34,6 +39,9 @@ for step=1:max_steps
     S_j = dot(repmat(repmat(pi_ij, [1 1 2]) .* tmp,[1 1 1 2]),repmat(reshape(tmp,[n p 1 dim]),[1 1 2 1]), 1);
     SIGMA = (2 * a * repmat(shiftdim(S_x,-2),[1 p 1 1]) + S_j) ...
             ./ (2 * a + n * repmat(pi_j,[1 1 dim dim]));
+
+    %% Plot intermediate results
+    scatter(mu(:,1),mu(:,2))
 end
 
 end
