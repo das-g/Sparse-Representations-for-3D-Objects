@@ -10,20 +10,21 @@ S_x = cov(x);
 a = 0.01;
 
 %% Iteration Start Values
-mu = x;
-p = size(mu,1);
-pi_j = ones(1, n); % row vector, because we treat j as the 2nd dimension
+random_order = randperm(n);
+p = round(n / 3)
+mu = x(random_order(1:p),:);
+pi_j = ones(1, p); % row vector, because we treat j as the 2nd dimension
 sigma = 1;
 SIGMA = repmat(reshape(eye(dim),[1 1 dim dim]),[1 p 1 1]) * sigma^2;
 
 %% EM Iteration
 for step=1:max_steps
     %% E-step
-    pi_ij=zeros(n);
-    for j=1:n
+    pi_ij=zeros(n,p);
+    for j=1:p
         pi_ij(:,j) = pi_j(j) * gauss(x, repmat(mu(j,:),n,1), squeeze(SIGMA(:,j,:,:)));
     end
-    pi_ij = pi_ij ./ repmat(sum(pi_ij, 2),1,n);
+    pi_ij = pi_ij ./ repmat(sum(pi_ij, 2),1,p);
     
     %% M-step
     pi_j = mean(pi_ij, 1); % Mean along i; results in a row vector
