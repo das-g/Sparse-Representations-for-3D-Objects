@@ -3,8 +3,7 @@ function [ output_args ] = EM( x )
 %   Detailed explanation goes here
 
 max_steps = 10;
-n = size(x, 1)
-dim = size(x, 2)
+[n dim] = size(x)
 
 %% Iteration Start Values
 mu = x;
