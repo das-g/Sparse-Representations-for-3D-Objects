@@ -3,8 +3,7 @@ function [ mu SIGMA ] = EM( x )
 %   Detailed explanation goes here
 
 max_steps = 10;
-n = size(x, 1)
-dim = size(x, 2)
+[n dim] = size(x)
 
 S_x = cov(x);
 a = 0.01;
