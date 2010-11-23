@@ -1,4 +1,4 @@
-function [ mu SIGMA ] = EM( x )
+function [ mu SIGMA ] = EM( x, centers_to_points_ratio)
 %EM Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -10,7 +10,7 @@ a = 0.01;
 
 %% Iteration Start Values
 random_order = randperm(n);
-p = round(n / 3)
+p = round(n * centers_to_points_ratio)
 mu = x(random_order(1:p),:);
 pi_j = ones(1, p); % row vector, because we treat j as the 2nd dimension
 sigma = 1;
