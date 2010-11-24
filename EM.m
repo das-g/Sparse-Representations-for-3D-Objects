@@ -1,12 +1,32 @@
-function [ mu SIGMA ] = EM( x, centers_to_points_ratio)
+function [ mu SIGMA ] = EM( x, varargin)
 %EM Summary of this function goes here
 %   Detailed explanation goes here
 
+%% Default values for optional arguments
+a = 0.01;
 max_steps = 10;
+centers_to_points_ratio = 1;
+
+%% Override values for optional arguments that have been given
+optargin = size(varargin,2);
+assert(mod(optargin,2) == 0, 'optional arguments have to be provided in pairs: name, value')
+for optarg=1:2:optargin
+    switch varargin{optarg}
+        case 'a'
+            a = varargin{optarg + 1};
+        case 'max_steps'
+            max_steps = varargin{optarg + 1};
+        case 'centers_to_points_ratio'
+            centers_to_points_ratio = varargin{optarg + 1};
+        otherwise
+            error(['unknown optional argument name: ' varargin{optarg}] )
+    end % switch optarg
+end % for optarg
+
+%% Derived values that aren't changed during the iteration
 [n dim] = size(x)
 
 S_x = cov(x);
-a = 0.01;
 
 %% Iteration Start Values
 random_order = randperm(n);
