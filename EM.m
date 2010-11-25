@@ -7,6 +7,7 @@ a = 0.01;
 max_steps = 10;
 centers_to_points_ratio = 1;
 initial_sigma = 1;
+input_plot = @(x,SIGMA) [];
 pre_plot = @(mu,SIGMA) []; % as close to a NOOP as we get with anonymous functions
 step_plot = @(mu,SIGMA) [];
 post_plot = @(mu,SIGMA) [];
@@ -25,6 +26,8 @@ for optarg=1:2:optargin
             centers_to_points_ratio = varargin{optarg + 1};
         case 'initial_sigma'
             initial_sigma = varargin{optarg + 1};
+        case 'input_plot'
+            input_plot = varargin{optarg + 1};
         case 'pre_plot'
             pre_plot = varargin{optarg + 1};
         case 'step_plot'
@@ -48,7 +51,8 @@ mu = x(random_order(1:p),:);
 pi_j = ones(1, p); % row vector, because we treat j as the 2nd dimension
 SIGMA = repmat(reshape(eye(dim),[1 1 dim dim]),[1 p 1 1]) * initial_sigma^2;
 
-% Plot initial values
+% Plot input & initial values
+input_plot(x,SIGMA);
 pre_plot(mu,SIGMA);
 
 %% EM Iteration
