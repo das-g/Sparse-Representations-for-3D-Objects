@@ -6,6 +6,10 @@ function [ mu SIGMA ] = EM( x, varargin)
 a = 0.01;
 max_steps = 10;
 centers_to_points_ratio = 1;
+pre_plot = @(mu,SIGMA) []; % as close to a NOOP as we get with anonymous functions
+step_plot = @(mu,SIGMA) [];
+post_plot = @(mu,SIGMA) [];
+
 
 %% Override values for optional arguments that have been given
 optargin = size(varargin,2);
@@ -18,6 +22,12 @@ for optarg=1:2:optargin
             max_steps = varargin{optarg + 1};
         case 'centers_to_points_ratio'
             centers_to_points_ratio = varargin{optarg + 1};
+        case 'pre_plot'
+            pre_plot = varargin{optarg + 1};
+        case 'step_plot'
+            step_plot = varargin{optarg + 1};
+        case 'post_plot'
+            post_plot = varargin{optarg + 1};
         otherwise
             error(['unknown optional argument name: ' varargin{optarg}] )
     end % switch optarg
@@ -37,9 +47,7 @@ sigma = 1;
 SIGMA = repmat(reshape(eye(dim),[1 1 dim dim]),[1 p 1 1]) * sigma^2;
 
 % Plot initial values
-hold off
-scatter(x(:,1),x(:,2))
-hold on
+pre_plot(mu,SIGMA);
 
 %% EM Iteration
 for step=1:max_steps
@@ -60,7 +68,10 @@ for step=1:max_steps
             ./ (2 * a + n * repmat(pi_j,[1 1 dim dim]));
 
     %% Plot intermediate results
-    scatter(mu(:,1),mu(:,2))
+    step_plot(mu,SIGMA);
 end
+
+%% Plot final results
+post_plot(mu,SIGMA);
 
 end
