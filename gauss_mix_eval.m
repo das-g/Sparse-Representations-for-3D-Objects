@@ -13,7 +13,7 @@ function [ result ] = gauss_mix_eval( mu, SIGMA, x )
 %       x       n-by-d array where each of the n rows represents a position
 %               where the function shall be evaluated
 
-[p, dim] = size(mu);
+p = size(mu,1);
 n = size(x,1);
 
 result = 0;
