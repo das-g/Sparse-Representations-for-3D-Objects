@@ -1,6 +1,12 @@
 function [ ] = plot_gauss_mix( mu, SIGMA, varargin )
 %PLOT_GAUSS_MIX Plot gaussian mixture
 %   given by centers mu and covariance matrices SIGMA
+%
+%       mu      is a p-by-d matrix where each of the p rows represents the
+%               (d-dimensional) position of a center
+%
+%       SIGMA   is a p-by-d-by-d array where SIGMA(j,:,:) is the d-by-d
+%               covariance matrix corresponding to the j-th center
 
 %% Default values for optional arguments
 x_res = 100;
@@ -20,7 +26,6 @@ for optarg=1:2:optargin
             y_res = varargin{optarg + 1};
         case 'kernel_indices'
             mu = mu(varargin{optarg + 1},:);
-            SIGMA = squeeze(SIGMA);
             SIGMA = SIGMA(varargin{optarg + 1},:,:);
         otherwise
             error(['unknown optional argument name: ' varargin{optarg}] )
@@ -35,7 +40,7 @@ corners = (corners - repmat(center,[2 1])) * 1.2 + repmat(center,[2 1]);
 [X Y] = meshgrid( linspace(corners(1,1), corners(2,1), x_res), ...
                   linspace(corners(1,2), corners(2,2), y_res) );
 
-Z = gauss_mix_eval(mu, squeeze(SIGMA), [X(:) Y(:)]);
+Z = gauss_mix_eval(mu, SIGMA, [X(:) Y(:)]);
 
 Z = reshape(Z, x_res, y_res);
 

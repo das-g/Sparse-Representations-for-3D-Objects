@@ -52,8 +52,8 @@ pi_j = ones(1, p); % row vector, because we treat j as the 2nd dimension
 SIGMA = repmat(reshape(eye(dim),[1 1 dim dim]),[1 p 1 1]) * initial_sigma^2;
 
 % Plot input & initial values
-input_plot(x,SIGMA);
-pre_plot(mu,SIGMA);
+input_plot(x,squeeze(SIGMA));
+pre_plot(mu,squeeze(SIGMA));
 
 %% EM Iteration
 for step=1:max_steps
@@ -74,10 +74,10 @@ for step=1:max_steps
             ./ (2 * a + n * repmat(pi_j,[1 1 dim dim]));
 
     %% Plot intermediate results
-    step_plot(mu,SIGMA);
+    step_plot(mu,squeeze(SIGMA));
 end
 
 %% Plot final results
-post_plot(mu,SIGMA);
+post_plot(mu,squeeze(SIGMA));
 
 end
