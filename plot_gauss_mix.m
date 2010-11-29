@@ -18,6 +18,10 @@ for optarg=1:2:optargin
             x_res = varargin{optarg + 1};
         case 'y_res'
             y_res = varargin{optarg + 1};
+        case 'kernel_indices'
+            mu = mu(varargin{optarg + 1},:);
+            SIGMA = squeeze(SIGMA);
+            SIGMA = SIGMA(varargin{optarg + 1},:,:);
         otherwise
             error(['unknown optional argument name: ' varargin{optarg}] )
     end % switch optarg
