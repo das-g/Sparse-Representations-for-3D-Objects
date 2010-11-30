@@ -8,29 +8,38 @@ function [ ] = plot_gauss_mix( mu, SIGMA, varargin )
 %       SIGMA   is a p-by-d-by-d array where SIGMA(j,:,:) is the d-by-d
 %               covariance matrix corresponding to the j-th center
 
-%% Default values for optional arguments
-x_res = 100;
-y_res = 100;
+%% Parse input arguments
+ip = inputParser;
 
-%% Override values for optional arguments that have been given
-optargin = size(varargin,2);
-assert(mod(optargin,2) == 0, 'optional arguments have to be provided in pairs: name, value')
-for optarg=1:2:optargin
-    switch varargin{optarg}
-        case 'res'
-            x_res = varargin{optarg + 1};
-            y_res = varargin{optarg + 1};
-        case 'x_res'
-            x_res = varargin{optarg + 1};
-        case 'y_res'
-            y_res = varargin{optarg + 1};
-        case 'kernel_indices'
-            mu = mu(varargin{optarg + 1},:);
-            SIGMA = SIGMA(varargin{optarg + 1},:,:);
-        otherwise
-            error(['unknown optional argument name: ' varargin{optarg}] )
-    end % switch optarg
-end % for optarg
+ip.addRequired('mu');
+ip.addRequired('SIGMA');
+
+ip.addParamValue('res', 100);
+ip.addParamValue('x_res', false);
+ip.addParamValue('y_res', false);
+ip.addParamValue('kernel_indices', false);
+
+ip.parse(mu, SIGMA, varargin{:});
+
+%% Post-process input arguments
+if any(strcmpi('x_res', ip.UsingDefaults))
+    x_res = ip.Results.res;
+else
+    x_res = ip.Results.x_res;
+end
+
+if any(strcmpi('y_res', ip.UsingDefaults))
+    y_res = ip.Results.res;
+else
+    y_res = ip.Results.y_res;
+end
+
+if ~any(strcmpi('kernel_indices', ip.UsingDefaults))
+    mu = mu(ip.Results.kernel_indices, :);
+    SIGMA = SIGMA(ip.Results.kernel_indices, :, :);
+end
+
+%%
 
 corners = [min(mu); max(mu)];
 
