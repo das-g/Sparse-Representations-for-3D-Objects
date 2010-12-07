@@ -1,9 +1,9 @@
 res = 400
 
-data = load('../test/cartman.npoff');
+data = load('../test/square with gap.npoff');
 x = data(:,1:2);
 x_normals = data(:,3:4);
-start_sigma = 5;
+start_sigma = 0.5;
 
 plot_f(x, x_normals, ...
        repmat(reshape(eye(2) * start_sigma, ...
