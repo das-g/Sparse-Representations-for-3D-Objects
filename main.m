@@ -13,6 +13,8 @@ plot_f(x, x_normals, ...
 hold
 quiver(x(:,1),x(:,2),x_normals(:,1),x_normals(:,2),'color','black')
 
+figure
+
 [mu SIGMA] = EM(x, ...
                 'a', 0.0003, ...
                 'initial_sigma', start_sigma, ...
@@ -30,5 +32,7 @@ grad_weighted_signed_distance_fu(x, x_normals, ...
                                  mu);
 % normalize normals
 mu_normals = mu_normals ./ repmat(sqrt(mu_normals(:,1).^2+mu_normals(:,2).^2), [1 2]);
+
+plot_f(mu, mu_normals, squeeze(SIGMA),'res',res)
 hold
-quiver(mu(:,1),mu(:,2),-mu_normals(:,1),-mu_normals(:,2))
+quiver(mu(:,1),mu(:,2),mu_normals(:,1),mu_normals(:,2),'color','black')
