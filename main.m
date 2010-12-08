@@ -1,8 +1,8 @@
 res = 400
 
-load ../test/cartman.npoff
-x = cartman(:,1:2);
-x_normals = cartman(:,3:4);
+data = load('../test/cartman.npoff');
+x = data(:,1:2);
+x_normals = data(:,3:4);
 start_sigma = 5;
 
 quiver(x(:,1),x(:,2),-x_normals(:,1),-x_normals(:,2))
