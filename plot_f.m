@@ -1,4 +1,4 @@
-function [ ] = plot_f( x, normals, SIGMA, varargin )
+function [ ] = plot_f( x, normals, SIGMA, corners, varargin )
 %PLOT_F Plot weighted signed distance function
 %   given by points x and covariance matrices SIGMA
 %
@@ -7,6 +7,10 @@ function [ ] = plot_f( x, normals, SIGMA, varargin )
 %
 %       SIGMA   is a n-by-d-by-d array where SIGMA(i,:,:) is the d-by-d
 %               covariance matrix corresponding to the i-th point
+%
+%       corners matrix indicating the boundary of the area to be plotted.
+%               Structure: [ <left edge> , <lower edge>;
+%                            <right edge>, <upper edge>  ]
 
 %% Parse input arguments
 ip = inputParser;
@@ -14,13 +18,14 @@ ip = inputParser;
 ip.addRequired('x');
 ip.addRequired('normals');
 ip.addRequired('SIGMA');
+ip.addRequired('corners');
 
 ip.addParamValue('res', 100);
 ip.addParamValue('x_res', false);
 ip.addParamValue('y_res', false);
 ip.addParamValue('x_indices', false);
 
-ip.parse(x, normals, SIGMA, varargin{:});
+ip.parse(x, normals, SIGMA, corners, varargin{:});
 
 %% Post-process input arguments
 if any(strcmpi('x_res', ip.UsingDefaults))
@@ -41,11 +46,6 @@ if ~any(strcmpi('x_indices', ip.UsingDefaults))
 end
 
 %%
-
-corners = [min(x); max(x)];
-
-center = mean(corners,1);
-corners = (corners - repmat(center,[2 1])) * 1.2 + repmat(center,[2 1]);
 
 [X Y] = meshgrid( linspace(corners(1,1), corners(2,1), x_res), ...
                   linspace(corners(1,2), corners(2,2), y_res) );

@@ -1,4 +1,4 @@
-function [ ] = plot_gauss_mix( mu, SIGMA, varargin )
+function [ ] = plot_gauss_mix( mu, SIGMA, corners, varargin )
 %PLOT_GAUSS_MIX Plot gaussian mixture
 %   given by centers mu and covariance matrices SIGMA
 %
@@ -7,19 +7,24 @@ function [ ] = plot_gauss_mix( mu, SIGMA, varargin )
 %
 %       SIGMA   is a p-by-d-by-d array where SIGMA(j,:,:) is the d-by-d
 %               covariance matrix corresponding to the j-th center
+%
+%       corners matrix indicating the boundary of the area to be plotted.
+%               Structure: [ <left edge> , <lower edge>;
+%                            <right edge>, <upper edge>  ]
 
 %% Parse input arguments
 ip = inputParser;
 
 ip.addRequired('mu');
 ip.addRequired('SIGMA');
+ip.addRequired('corners');
 
 ip.addParamValue('res', 100);
 ip.addParamValue('x_res', false);
 ip.addParamValue('y_res', false);
 ip.addParamValue('kernel_indices', false);
 
-ip.parse(mu, SIGMA, varargin{:});
+ip.parse(mu, SIGMA, corners, varargin{:});
 
 %% Post-process input arguments
 if any(strcmpi('x_res', ip.UsingDefaults))
@@ -40,11 +45,6 @@ if ~any(strcmpi('kernel_indices', ip.UsingDefaults))
 end
 
 %%
-
-corners = [min(mu); max(mu)];
-
-center = mean(corners,1);
-corners = (corners - repmat(center,[2 1])) * 1.2 + repmat(center,[2 1]);
 
 [X Y] = meshgrid( linspace(corners(1,1), corners(2,1), x_res), ...
                   linspace(corners(1,2), corners(2,2), y_res) );
