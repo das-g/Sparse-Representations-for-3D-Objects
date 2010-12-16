@@ -52,7 +52,7 @@ end
 
 Z = weighted_signed_distance_fu(x, normals, SIGMA, [X(:) Y(:)]);
 
-Z = reshape(Z, x_res, y_res);
+Z = reshape(Z, y_res, x_res);
 
 figure
 imagesc([X(1,1) X(1,end)], [Y(1,1) Y(end,1)], Z)
