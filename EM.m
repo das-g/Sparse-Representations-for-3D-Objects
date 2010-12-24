@@ -21,7 +21,7 @@ ip.parse(x, varargin{:});
 %% Derived values that aren't changed during the iteration
 [n dim] = size(x)
 
-S_x = cov(x);
+S_x = eye(dim) * ip.Results.initial_sigma^2;
 
 %% Iteration Start Values
 random_order = randperm(n);
