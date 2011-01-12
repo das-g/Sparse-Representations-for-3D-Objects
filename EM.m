@@ -10,9 +10,15 @@ S_x = cov(x);
 a = 0.01;
 
 %% Iteration Start Values
-random_order = randperm(n);
 p = round(n / 3)
-mu = x(random_order(1:p),:);
+if p < n
+    % select random subset of input points as initial centers
+    random_order = randperm(n);
+    mu = x(random_order(1:p),:);
+else % (p == n)
+    % use all input points as initial centers
+    mu = x;
+end
 pi_j = ones(1, p); % row vector, because we treat j as the 2nd dimension
 sigma = 1;
 SIGMA = repmat(reshape(eye(dim),[1 1 dim dim]),[1 p 1 1]) * sigma^2;
