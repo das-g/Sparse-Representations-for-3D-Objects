@@ -1,13 +1,13 @@
 %% inputs
-f = @(x) cos(7 * x) + sin(5 * x);
+f = @(x) gauss(x, 0, 25);
 
-x_min = 0;
-x_max = 5;
-x_measurement = (x_min:0.01:x_max)';
+x_min = -25;
+x_max = 25;
+x_measurement = (x_min:1:x_max)';
 x_reconstruct = (x_min:0.01:x_max)';
 
-mu = (x_min:0.1:x_max)';
-SIGMA = 1;
+mu = (x_min:1:x_max)';
+SIGMA = 4;
 
 %% build measurement and reconstruction matrix
 p = size(mu, 1);
