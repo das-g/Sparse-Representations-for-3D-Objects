@@ -1,10 +1,12 @@
 %% inputs
 f = @(x) cos(7 * x) + sin(5 * x);
 
-x_measurement = (0:0.01:5)';
-x_reconstruct = (0:0.01:5)';
+x_min = 0;
+x_max = 5;
+x_measurement = (x_min:0.01:x_max)';
+x_reconstruct = (x_min:0.01:x_max)';
 
-mu = (0:0.1:5)';
+mu = (x_min:0.1:x_max)';
 SIGMA = 1;
 
 %% build measurement and reconstruction matrix
