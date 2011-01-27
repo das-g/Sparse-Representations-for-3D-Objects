@@ -1,9 +1,14 @@
+%% inputs
+f = @(x) cos(7 * x) + sin(5 * x);
+
 x_measurement = (0:0.01:5)';
 x_reconstruct = (0:0.01:5)';
-mu =(0:0.1:5)';
+
+mu = (0:0.1:5)';
 SIGMA = 1;
 
-p = size(mu,1);
+%% build measurement and reconstruction matrix
+p = size(mu, 1);
 n_measurement = size(x_measurement, 1);
 n_reconstruct = size(x_reconstruct, 1);
 
@@ -19,22 +24,25 @@ for j=1:p
                                squeeze(SIGMA));
 end
 
-f = @(x) cos(7*x) + sin(5*x);
-
+%% measure f
 f_measured = f(x_measurement);
 
 alpha = K_measurement \ f_measured;
 
+%% reconstruct f
 f_reconstructed = K_reconstruct * alpha;
+%% measure f at reconstruction points (for plotting & comparison)
 f_original = f(x_reconstruct); % actual value of f at reconstruction points
 
-subplot(2,1,1)
+%% Plot original and reconstructed f in upper half
+subplot(2, 1, 1)
 plot(x_reconstruct, f_original)
 hold on
 plot(x_reconstruct, f_reconstructed, 'color', 'red')
 legend('f','reconstructed f')
 hold off
 
-subplot(2,1,2)
+%% Plot error in lower half
+subplot(2, 1, 2)
 plot(x_reconstruct, f_reconstructed - f_original)
 title('error')
