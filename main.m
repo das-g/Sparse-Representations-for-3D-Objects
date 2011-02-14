@@ -52,35 +52,10 @@ Xq = [x - smoothed_normals * start_sigma * 0.5;
 %mu = x; % reference points, use input points for now
 mu_normals = x_normals; % normals at reference points (i.e. at kernel centers)
 
-old_path = path;
-addpath([pwd '/../ann_mwrapper'])
-
-nnidx = annquery(mu', Xq', 10);
-
-path(old_path)
-
 [n dim] = size(Xq);
 p = size(mu,1);
 
-A = sparse(n,p);
-
-for i = 1:n
-    neighborMuIndices = nnidx(:, i);
-    % The i'th measurement point might have less than size(nnidx, 1)
-    % neighbors. Eliminate empty idx entires
-    neighborMuIndices = neighborMuIndices(neighborMuIndices > 0);
-    
-    denominator = 0; % for normalization
-    
-    for j=neighborMuIndices'
-        kernel_value = gauss(Xq(i, :), mu(j, :), reshape(SIGMA(:,j,:,:), [dim dim]));
-        A(i,j) = dot(mu_normals(j,:), ...
-                                Xq(i,:) - mu(j,:), ...
-                                2) * kernel_value;
-        denominator = denominator + kernel_value;
-    end
-    A(i, neighborMuIndices) = A(i, neighborMuIndices) ./ denominator;
-end
+A = measurement_matrix(mu, mu_normals, SIGMA, Xq);
 
 % right-hand side (measured f)
 rhs = weighted_signed_distance_fu( mu, mu_normals, reshape(SIGMA, [p dim dim]), Xq );
