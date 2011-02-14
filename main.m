@@ -69,7 +69,6 @@ for i = 1:n
     % The i'th measurement point might have less than size(nnidx, 1)
     % neighbors. Eliminate empty idx entires
     neighborMuIndices = neighborMuIndices(neighborMuIndices > 0);
-    numNeighbors = length(neighborMuIndices);
     
     denominator = 0; % for normalization
     
