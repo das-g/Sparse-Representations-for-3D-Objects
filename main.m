@@ -71,7 +71,6 @@ for i = 1:n
     neighborMuIndices = neighborMuIndices(neighborMuIndices > 0);
     numNeighbors = length(neighborMuIndices);
     
-    numerator = 0;
     denominator = 0; % for normalization
     
     for j=neighborMuIndices'
