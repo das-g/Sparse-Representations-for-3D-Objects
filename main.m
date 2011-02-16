@@ -62,3 +62,5 @@ rhs = weighted_signed_distance_fu( mu, mu_normals, reshape(SIGMA, [p dim dim]), 
 
 % L2 approximation of f (also used as start point for L1 iteration)
 coeff_L2 = A \ rhs;
+
+plot_approx(mu,mu_normals,SIGMA,coeff_L2,corners, 'res', 200)
