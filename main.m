@@ -58,10 +58,7 @@ p = size(mu,1);
 A = measurement_matrix(mu, mu_normals, SIGMA, Xq);
 
 % right-hand side (measured f)
-rhs = weighted_signed_distance_fu( mu, mu_normals, ...
-                                   repmat(reshape(eye(2) * start_sigma^2, ...
-                                                  [1 dim dim]), ...
-                                   [p 1 1]), Xq );
+rhs = [ones(size(x,1),1); zeros(size(x,1),1); ones(size(x,1),1)];
 
 % L2 approximation of f (also used as start point for L1 iteration)
 coeff_L2 = A \ rhs;
