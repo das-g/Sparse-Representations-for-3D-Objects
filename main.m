@@ -62,8 +62,14 @@ rhs = weighted_signed_distance_fu( mu, mu_normals, ...
                                    repmat(reshape(eye(2) * start_sigma^2, ...
                                                   [1 dim dim]), ...
                                    [p 1 1]), Xq );
+old_path = path;
+addpath([pwd '/../l1_ls_matlab'])
 
-% L2 approximation of f (also used as start point for L1 iteration)
-coeff_L2 = A \ rhs;
+lambda = 0.01;
+[coeff_L1ls status] = l1_ls(A, rhs, lambda, 1e-3);
 
-plot_approx(mu,mu_normals,SIGMA,coeff_L2,corners, 'res', 200)
+path(old_path)
+
+assert(all(status == 'Solved'))
+
+plot_approx(mu,mu_normals,SIGMA,coeff_L1ls,corners, 'res', 200)
