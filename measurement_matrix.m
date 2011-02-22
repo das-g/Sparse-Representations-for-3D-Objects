@@ -1,9 +1,9 @@
-function A = measurement_matrix(mu, normals, SIGMA, x)
+function A = measurement_matrix(mu, normals, SIGMA, x, k)
 
 old_path = path;
 addpath([pwd '/../ann_mwrapper'])
 
-nnidx = annquery(mu', x', 10);
+nnidx = annquery(mu', x', k);
 
 path(old_path)
 

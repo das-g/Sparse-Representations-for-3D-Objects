@@ -55,7 +55,12 @@ mu_normals = x_normals; % normals at reference points (i.e. at kernel centers)
 [n dim] = size(Xq);
 p = size(mu,1);
 
-A = measurement_matrix(mu, mu_normals, SIGMA, Xq);
+nonzeros = -ones(1,100);
+time = -ones(1,100);
+
+for k=1:100
+tic
+A = measurement_matrix(mu, mu_normals, SIGMA, Xq, k);
 
 % right-hand side (measured f)
 rhs = weighted_signed_distance_fu( mu, mu_normals, ...
@@ -66,7 +71,7 @@ old_path = path;
 addpath([pwd '/../l1_ls_matlab'])
 
 lambda = 0.01;
-[coeff_L1ls status] = l1_ls(A, rhs, lambda, 1e-3);
+[coeff_L1ls status] = l1_ls(A, rhs, lambda, 1e-3, true);
 
 path(old_path)
 
@@ -76,4 +81,6 @@ assert(all(status == 'Solved'))
 threshold = 0.1;
 coeff_L1ls = coeff_L1ls .* (coeff_L1ls > threshold);
 
-plot_approx(mu,mu_normals,SIGMA,coeff_L1ls,corners, 'res', 200)
+time(k) = toc;
+nonzeros(k) = nnz(coeff_L1ls);
+end
