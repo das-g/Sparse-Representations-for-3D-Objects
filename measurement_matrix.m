@@ -1,11 +1,9 @@
 function A = measurement_matrix(mu, normals, SIGMA, x)
 
 old_path = path;
-addpath([pwd '/../ann_mwrapper'])
+addpath([pwd '/../ann_mwrapper/extension'])
 
-nnidx = annquery(mu', x', 10);
-
-path(old_path)
+[mu_kdtree, pts] = annConstructTree(mu');
 
 [n dim] = size(x);
 p = size(mu,1);
@@ -13,7 +11,7 @@ p = size(mu,1);
 A = sparse(n,p);
 
 for i = 1:n
-    neighborMuIndices = nnidx(:, i);
+    neighborMuIndices = annFindKnn(mu_kdtree, x(i, :)', 10, 0, 0);
     % The i'th measurement point might have less than size(nnidx, 1)
     % neighbors. Eliminate empty idx entires
     neighborMuIndices = neighborMuIndices(neighborMuIndices > 0);
@@ -29,3 +27,6 @@ for i = 1:n
     end
     A(i, neighborMuIndices) = A(i, neighborMuIndices) ./ denominator;
 end
+
+annDeleteTree(mu_kdtree, pts)
+path(old_path)
