@@ -20,12 +20,12 @@ ip.addParamValue('post_plot', @(x,SIGMA) []);
 ip.parse(x, varargin{:});
 
 %% Derived values that aren't changed during the iteration
-[n dim] = size(x)
+[n dim] = size(x);
 
 S_x = eye(dim) * ip.Results.target_sigma^2;
 
 %% Iteration Start Values
-p = round(n * ip.Results.centers_to_points_ratio)
+p = round(n * ip.Results.centers_to_points_ratio);
 if p < n
     % select random subset of input points as initial centers
     random_order = randperm(n);

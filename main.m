@@ -1,4 +1,4 @@
-res = 400
+res = 400;
 
 data = load('../test/cartman.npoff');
 x = data(:,1:2);
@@ -66,7 +66,7 @@ old_path = path;
 addpath([pwd '/../l1_ls_matlab'])
 
 lambda = 0.01;
-[coeff_L1ls status] = l1_ls(A, rhs, lambda, 1e-3);
+[coeff_L1ls status] = l1_ls(A, rhs, lambda, 1e-3, true);
 
 path(old_path)
 
