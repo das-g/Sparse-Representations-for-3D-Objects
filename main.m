@@ -1,15 +1,14 @@
 res = 400
 
-data = load('../test/cartman.npoff');
-x = data(:,1:2);
-x_normals = data(:,3:4);
+x = unit_circle(1e2); % 100 points on a unit cicle centered on origin
+x_normals = x; % Yes, for an origin centered unit circle, this works.
 
 corners = [min(x); max(x)];
 center = mean(corners,1);
 corners = (corners - repmat(center,[2 1])) * 1.2 + repmat(center,[2 1]);
 
-start_sigma = 7;
-goal_sigma = 130;
+start_sigma = 0.2;
+goal_sigma = 5;
 
 % plot_f(x, x_normals, ...
 %        repmat(reshape(eye(2) * start_sigma^2, ...
