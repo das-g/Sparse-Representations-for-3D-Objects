@@ -74,6 +74,13 @@ assert(all(status == 'Solved'))
 
 % sparsify (eliminate almost-zero entries)
 threshold = 0.1;
-coeff_L1ls = coeff_L1ls .* (abs(coeff_L1ls) > threshold);
+coeff_L1ls_nonzero_idx = abs(coeff_L1ls) > threshold; % vector of booleans
 
-plot_approx(mu,mu_normals,SIGMA,coeff_L1ls,corners, 'res', 200)
+coeff_L1ls_reduced = coeff_L1ls(coeff_L1ls_nonzero_idx);
+mu_reduced = mu(coeff_L1ls_nonzero_idx, :);
+mu_normals_reduced = mu_normals(coeff_L1ls_nonzero_idx, :);
+SIGMA_reduced = SIGMA(:, coeff_L1ls_nonzero_idx, :, :);
+
+% reconstruct the target function from the reduced data
+plot_approx(mu_reduced, mu_normals_reduced, SIGMA_reduced, ...
+            coeff_L1ls_reduced, corners, 'res', 200)
