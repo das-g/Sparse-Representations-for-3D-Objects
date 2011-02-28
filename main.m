@@ -1,6 +1,12 @@
-res = 400;
+size_range = 50:3:350;
+time_build_measurement_matrix = zeros(size(size_range));
+time_l1_ls = zeros(size(size_range));
+num_coeffs = zeros(size(size_range));
+num_coeffs_reduced = zeros(size(size_range));
 
-x = unit_circle(1e2); % 100 points on a unit cicle centered on origin
+for i = 1:length(size_range);
+
+x = unit_circle(size_range(i)); % 100 points on a unit cicle centered on origin
 x_normals = x; % Yes, for an origin centered unit circle, this works.
 
 corners = [min(x); max(x)];
@@ -54,7 +60,9 @@ mu_normals = x_normals; % normals at reference points (i.e. at kernel centers)
 [n dim] = size(Xq);
 p = size(mu,1);
 
+tic
 A = measurement_matrix(mu, mu_normals, SIGMA, Xq);
+time_build_measurement_matrix(i) = toc;
 
 % right-hand side (measured f)
 rhs = weighted_signed_distance_fu( mu, mu_normals, ...
@@ -65,7 +73,9 @@ old_path = path;
 addpath([pwd '/../l1_ls_matlab'])
 
 lambda = 0.01;
+tic
 [coeff_L1ls status] = l1_ls(A, rhs, lambda, 1e-3, true);
+time_l1_ls(i) = toc;
 
 path(old_path)
 
@@ -80,6 +90,9 @@ mu_reduced = mu(coeff_L1ls_nonzero_idx, :);
 mu_normals_reduced = mu_normals(coeff_L1ls_nonzero_idx, :);
 SIGMA_reduced = SIGMA(:, coeff_L1ls_nonzero_idx, :, :);
 
-% reconstruct the target function from the reduced data
-plot_approx(mu_reduced, mu_normals_reduced, SIGMA_reduced, ...
-            coeff_L1ls_reduced, corners, 'res', 200)
+num_coeffs(i) = numel(coeff_L1ls);
+num_coeffs_reduced(i) = numel(coeff_L1ls_reduced);
+
+end
+
+save('circle_measurements.mat', 'size_range', 'time_build_measurement_matrix', 'time_l1_ls', 'num_coeffs', 'num_coeffs_reduced')
