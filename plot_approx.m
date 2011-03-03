@@ -53,8 +53,16 @@ end
 
 [X Y] = meshgrid( linspace(corners(1,1), corners(2,1), x_res), ...
                   linspace(corners(1,2), corners(2,2), y_res) );
+Xq = [X(:) Y(:)];
 
-A = measurement_matrix(x, normals, SIGMA, [X(:) Y(:)]);
+old_path = path;
+addpath([pwd '/../ann_mwrapper'])
+
+nnidx = annquery(x', Xq', 10);
+
+path(old_path)
+
+A = measurement_matrix(x, normals, SIGMA, Xq, nnidx);
 Z = A * coeffs;
 
 Z = reshape(Z, y_res, x_res);

@@ -1,11 +1,4 @@
-function A = measurement_matrix(mu, normals, SIGMA, x)
-
-old_path = path;
-addpath([pwd '/../ann_mwrapper'])
-
-nnidx = annquery(mu', x', 10);
-
-path(old_path)
+function A = measurement_matrix(mu, normals, SIGMA, x, nnidx)
 
 [n dim] = size(x);
 p = size(mu,1);
