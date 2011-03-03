@@ -55,14 +55,7 @@ mu_normals = x_normals; % normals at reference points (i.e. at kernel centers)
 [n dim] = size(Xq);
 p = size(mu,1);
 
-old_path = path;
-addpath([pwd '/../ann_mwrapper'])
-
-nnidx = annquery(mu', Xq', 10);
-
-path(old_path)
-
-A = measurement_matrix(mu, mu_normals, SIGMA, Xq, nnidx);
+A = measurement_matrix(mu, mu_normals, SIGMA, Xq);
 
 % right-hand side (measured f)
 rhs = weighted_signed_distance_fu( mu, mu_normals, ...
