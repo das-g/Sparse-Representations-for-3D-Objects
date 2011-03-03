@@ -1,9 +1,9 @@
 function A = measurement_matrix_values(mu, normals, SIGMA, x, nnidx)
 
 [n dim] = size(x);
-p = size(mu,1);
+p_nn = size(nnidx,1);
 
-A = sparse(n,p);
+A = zeros(n,p_nn);
 
 for i = 1:n
     neighborMuIndices = nnidx(:, i);
@@ -13,12 +13,15 @@ for i = 1:n
     
     denominator = 0; % for normalization
     
+    j_ = 0;
+    
     for j=neighborMuIndices'
+        j_ = j_ + 1;
         kernel_value = gauss(x(i, :), mu(j, :), reshape(SIGMA(:,j,:,:), [dim dim]));
-        A(i,j) = dot(normals(j,:), ...
+        A(i, j_) = dot(normals(j,:), ...
                                 x(i,:) - mu(j,:), ...
                                 2) * kernel_value;
         denominator = denominator + kernel_value;
     end
-    A(i, neighborMuIndices) = A(i, neighborMuIndices) ./ denominator;
+    A(i, :) = A(i, :) ./ denominator;
 end
