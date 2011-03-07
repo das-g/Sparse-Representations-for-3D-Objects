@@ -66,4 +66,3 @@ imagesc([X(1,1) X(1,end)], [Y(1,1) Y(end,1)], Z)
 set(gca,'YDir','normal')
 
 end
-
