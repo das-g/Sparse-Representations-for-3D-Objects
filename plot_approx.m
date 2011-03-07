@@ -54,7 +54,8 @@ end
                   linspace(corners(1,2), corners(2,2), y_res) );
 
 %% Evaluate function for coordinates
-A = measurement_matrix(x, normals, SIGMA, [X(:) Y(:)]);
+A = measurement_matrix(x, normals, SIGMA, [X(:) Y(:)], ...
+    'compile', true ); % compile value generation code
 Z = A * coeffs;
 
 %% Deserialize function values
