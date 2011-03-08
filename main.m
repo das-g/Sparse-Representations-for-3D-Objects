@@ -59,7 +59,7 @@ mu_normals = x_normals; % normals at reference points (i.e. at kernel centers)
 p = size(mu,1);
 
 tic
-A = measurement_matrix(mu, mu_normals, SIGMA, Xq);
+A = measurement_matrix(mu, mu_normals, SIGMA, Xq, 'compile', true);
 time_build_measurement_matrix(i) = toc;
 
 % right-hand side (measured f)
@@ -93,4 +93,4 @@ num_coeffs_reduced(i) = numel(coeff_L1ls_reduced);
 
 end
 
-save('circle_measurements_2.mat', 'size_range', 'time_build_measurement_matrix', 'time_l1_ls', 'num_coeffs', 'num_coeffs_reduced')
+save('circle_measurements_3.mat', 'size_range', 'time_build_measurement_matrix', 'time_l1_ls', 'num_coeffs', 'num_coeffs_reduced')
