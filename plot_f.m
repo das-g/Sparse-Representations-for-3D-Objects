@@ -45,18 +45,19 @@ if ~any(strcmpi('x_indices', ip.UsingDefaults))
     SIGMA = SIGMA(ip.Results.x_indices, :, :);
 end
 
-%%
-
+%% Coordinates for each pixel
 [X Y] = meshgrid( linspace(corners(1,1), corners(2,1), x_res), ...
                   linspace(corners(1,2), corners(2,2), y_res) );
 
+%% Evaluate function for coordinates
 Z = weighted_signed_distance_fu(x, normals, SIGMA, [X(:) Y(:)]);
 
+%% Deserialize function values
 Z = reshape(Z, y_res, x_res);
 
+%% Display
 figure
 imagesc([X(1,1) X(1,end)], [Y(1,1) Y(end,1)], Z)
 set(gca,'YDir','normal')
 
 end
-
