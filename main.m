@@ -1,4 +1,4 @@
-size_range = 50:17:1750;
+size_range = 50:107:10750;
 time_build_measurement_matrix = zeros(size(size_range));
 time_l1_ls = zeros(size(size_range));
 num_coeffs = zeros(size(size_range));
@@ -93,4 +93,4 @@ num_coeffs_reduced(i) = numel(coeff_L1ls_reduced);
 
 end
 
-save('circle_measurements_3.mat', 'size_range', 'time_build_measurement_matrix', 'time_l1_ls', 'num_coeffs', 'num_coeffs_reduced')
+save('circle_measurements_5.mat', 'size_range', 'time_build_measurement_matrix', 'time_l1_ls', 'num_coeffs', 'num_coeffs_reduced')

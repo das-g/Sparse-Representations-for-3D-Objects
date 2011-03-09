@@ -20,7 +20,7 @@ old_path = path;
 addpath([pwd '/../ann_mwrapper']) % Full path needed, so prepend working dir
 
 % Query for nearest 10 mu for each x.
-nnidx = annquery(mu', x', 10);
+nnidx = annquery(mu', x', 50);
 
 % Clean up. (Restore previous path.)
 path(old_path)
