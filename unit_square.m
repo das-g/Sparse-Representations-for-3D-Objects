@@ -10,19 +10,23 @@ function [ positions, normals ] = unit_square( n, rotation )
 %   [x,normals] = UNIT_SQUARE(n, rotation) generate a pre-rotated square
 %   instead of an axis aligned one. rotation is in radian.
 
+%% Prepare rotations
+
+% Rotations by multiples of 90° to get the points on the other edges from
+% the points on one edge.
+rotations = [1 1i -1 -1i];
+
+% If the user requested a rotation of the whole square, incorporate it into
+% the rotations vector, too.
+if nargin > 1
+    rotations = rotations * exp(1i * rotation);
+end
+
+%% Positions
 % n points on the right edge of a square (on the complex plane),
 % inclusive the lower corner, exclusive the upper corner (which will be
 % part of the upper edge)
 positions = 1/2 + (-1/2:1/n:1/2-1/n) * 1i;
-
-% Rotations by multiples of 90° to get the other edges.
-rotations = [1 1i -1 -1i];
-
-% If the user requested a rotation of the whole square, incorporate it into
-% the rotations vector.
-if nargin > 1
-    rotations = rotations * exp(1i * rotation);
-end
 
 % Apply rotations. The result will be a 4n x 4 matrix. We'll serialize it
 % in the next step.
@@ -31,6 +35,7 @@ positions = positions' * rotations;
 % Go from complex pane to 2D real plane. (And serealize data.)
 positions = [real(positions(:)) imag(positions(:))];
 
+%% Normals
 if nargout > 1
     % Normals for the right edge. The corner point gets a 45° normal. All
     % others are just perpendicular to the edge.
