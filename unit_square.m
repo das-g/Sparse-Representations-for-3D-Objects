@@ -1,13 +1,13 @@
 function [ positions, normals ] = unit_square( n )
-%UNIT_SQUARE uniform points and corresponding normals on 2-unit square
+%UNIT_SQUARE uniform points and corresponding normals on unit square
 %   x = UNIT_SQUARE(n) computes 4*n uniformly distributed points x on
-%    a 2-unit square.
+%    a unit square.
 %   [x,normals] = UNIT_SQUARE(n) also computes the corresponding normals.
 
 % n points on the right edge of a square (on the complex plane),
 % inclusive the lower corner, exclusive the upper corner (which will be
 % part of the upper edge)
-positions = 1 + (-1:2/n:1-2/n) * 1i;
+positions = 1/2 + (-1/2:1/n:1/2-1/n) * 1i;
 
 % Rotate by multiples of 90° (a.k.a. integer powers of 1i) to get right,
 % upper, left and lower edge. The result will be a 4n x 4 matrix. We'll
