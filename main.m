@@ -1,4 +1,4 @@
-size_range = 50:17:1750;
+size_range = 50:170:1750;
 time_build_measurement_matrix = zeros(size(size_range));
 time_l1_ls = zeros(size(size_range));
 num_coeffs = zeros(size(size_range));
@@ -6,8 +6,7 @@ num_coeffs_reduced = zeros(size(size_range));
 
 for i = 1:length(size_range);
 
-x = unit_circle(size_range(i)); % 100 points on a unit cicle centered on origin
-x_normals = x; % Yes, for an origin centered unit circle, this works.
+[x, x_normals] = unit_square(size_range(i),1); % 4*size_range(i) points on a unit square centered on origin
 
 corners = [min(x); max(x)];
 center = mean(corners,1);
@@ -34,15 +33,6 @@ goal_sigma = 5;
                 'centers_to_points_ratio', 1, ...
                 'max_steps', 40);
 
-smoothed_normals = ...
-grad_weighted_signed_distance_fu(x, x_normals, ...
-                                 repmat(reshape(eye(2) * start_sigma^2, ...
-                                                [1 2 2]), ...
-                                        [size(x,1) 1 1]), ...
-                                 mu);
-% normalize normals
-smoothed_normals = smoothed_normals ./ repmat(sqrt(smoothed_normals(:,1).^2+smoothed_normals(:,2).^2), [1 2]);
-
 % plot_f(mu, mu_normals, squeeze(SIGMA), corners, 'res',res)
 % hold
 % quiver(mu(:,1),mu(:,2),mu_normals(:,1),mu_normals(:,2),'color','black')
@@ -51,9 +41,9 @@ smoothed_normals = smoothed_normals ./ repmat(sqrt(smoothed_normals(:,1).^2+smoo
 % Query points MUST be measurement points, reference points MUST be kernel centers,
 % NOT the other waz around. Else only the nearest k measurement points
 % would 'see' a given kernel.
-Xq = [x - smoothed_normals * start_sigma * 0.5;
+Xq = [x - x_normals * start_sigma * 0.5;
       x;
-      x + smoothed_normals * start_sigma * 0.5]; % query points
+      x + x_normals * start_sigma * 0.5]; % query points
 %mu = x; % reference points, use input points for now
 mu_normals = x_normals; % normals at reference points (i.e. at kernel centers)
 
@@ -95,4 +85,4 @@ num_coeffs_reduced(i) = numel(coeff_L1ls_reduced);
 
 end
 
-save('circle_measurements_3.mat', 'size_range', 'time_build_measurement_matrix', 'time_l1_ls', 'num_coeffs', 'num_coeffs_reduced')
+save('square_measurements_1.mat', 'size_range', 'time_build_measurement_matrix', 'time_l1_ls', 'num_coeffs', 'num_coeffs_reduced')
