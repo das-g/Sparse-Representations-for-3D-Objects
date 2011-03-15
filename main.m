@@ -83,4 +83,4 @@ num_coeffs_reduced(i) = numel(coeff_L1ls_reduced);
 
 end
 
-save('square_measurements_1.mat', 'size_range', 'time_build_measurement_matrix', 'time_l1_ls', 'num_coeffs', 'num_coeffs_reduced')
+save('square_measurements_2.mat', 'size_range', 'time_build_measurement_matrix', 'time_l1_ls', 'num_coeffs', 'num_coeffs_reduced')
