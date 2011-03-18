@@ -74,6 +74,6 @@ assert(all(status == 'Solved'))
 
 % sparsify (eliminate almost-zero entries)
 threshold = 0.1;
-coeff_L1ls = coeff_L1ls .* (coeff_L1ls > threshold);
+coeff_L1ls = coeff_L1ls .* (abs(coeff_L1ls) > threshold);
 
 plot_approx(mu,mu_normals,SIGMA,coeff_L1ls,corners, 'res', 200)
