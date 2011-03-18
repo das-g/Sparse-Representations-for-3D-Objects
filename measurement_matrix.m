@@ -11,9 +11,9 @@ p = size(mu,1);
 A = sparse(n,p);
 
 for j = 1:p
-    circumcircle_radius = max(eig(reshape(SIGMA(:,j,:,:), [dim dim])));
+    circumcircle_radius = max(eig(reshape(SIGMA(:,j,:,:), [dim dim]))) * 2.5;
     neighborXIndices = annFindKnn(x_kdtree, mu(j, :)', ...
-                                  circumcircle_radius ^ 2 * 1e1, ... % FIXME: max. number of neighbors should also depend on the density of x
+                                  n, ... % FIXME: max. number of neighbors should be less than number of all reference points
                                   circumcircle_radius, 0);
     % The i'th measurement point might have less than size(nnidx, 1)
     % neighbors. Eliminate empty idx entires
