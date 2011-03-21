@@ -1,4 +1,4 @@
-res = 400
+res = 400;
 
 data = load('../test/cartman.npoff');
 x = data(:,1:2);
@@ -66,7 +66,7 @@ old_path = path;
 addpath([pwd '/../l1_ls_matlab'])
 
 lambda = 0.01;
-[coeff_L1ls status] = l1_ls(A, rhs, lambda, 1e-3);
+[coeff_L1ls status] = l1_ls(A, rhs, lambda, 1e-3, true);
 
 path(old_path)
 
@@ -74,6 +74,13 @@ assert(all(status == 'Solved'))
 
 % sparsify (eliminate almost-zero entries)
 threshold = 0.1;
-coeff_L1ls = coeff_L1ls .* (abs(coeff_L1ls) > threshold);
+coeff_L1ls_nonzero_idx = abs(coeff_L1ls) > threshold; % vector of booleans
 
-plot_approx(mu,mu_normals,SIGMA,coeff_L1ls,corners, 'res', 200)
+coeff_L1ls_reduced = coeff_L1ls(coeff_L1ls_nonzero_idx);
+mu_reduced = mu(coeff_L1ls_nonzero_idx, :);
+mu_normals_reduced = mu_normals(coeff_L1ls_nonzero_idx, :);
+SIGMA_reduced = SIGMA(:, coeff_L1ls_nonzero_idx, :, :);
+
+% reconstruct the target function from the reduced data
+plot_approx(mu_reduced, mu_normals_reduced, SIGMA_reduced, ...
+            coeff_L1ls_reduced, corners, 'res', 200)
