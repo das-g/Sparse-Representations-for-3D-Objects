@@ -22,32 +22,28 @@ goal_sigma = 130;
 % 
 % figure
 
-mu = x;
+mu = [x - x_normals * start_sigma * 0.5;
+      x;
+      x + x_normals * start_sigma * 0.5];
 SIGMA = repmat(reshape(eye(2) * start_sigma^2, ...
                        [1 1 2 2]), ...
-                  [1 size(x,1) 1 1]);
+                  [1 size(mu,1) 1 1]);
 
 % plot_f(mu, mu_normals, squeeze(SIGMA), corners, 'res',res)
 % hold
 % quiver(mu(:,1),mu(:,2),mu_normals(:,1),mu_normals(:,2),'color','black')
 % scatter(x(:,1),x(:,2),'.r')
 
-% Query points MUST be measurement points, reference points MUST be kernel centers,
-% NOT the other way around. Else only the nearest k measurement points
-% would 'see' a given kernel.
-Xq = [x - x_normals * start_sigma * 0.5;
-      x;
-      x + x_normals * start_sigma * 0.5]; % query points
+Xq = mu; % query points
 %mu = x; % reference points, use input points for now
-mu_normals = x_normals; % normals at reference points (i.e. at kernel centers)
 
 [n dim] = size(Xq);
 p = size(mu,1);
 
-A = measurement_matrix(mu, mu_normals, SIGMA, Xq);
+A = measurement_matrix(mu, SIGMA, Xq);
 
 % right-hand side (measured f)
-rhs = weighted_signed_distance_fu( mu, mu_normals, ...
+rhs = weighted_signed_distance_fu( x, x_normals, ...
                                    repmat(reshape(eye(2) * start_sigma^2, ...
                                                   [1 dim dim]), ...
                                    [p 1 1]), Xq );
@@ -67,9 +63,8 @@ coeff_L1ls_nonzero_idx = abs(coeff_L1ls) > threshold; % vector of booleans
 
 coeff_L1ls_reduced = coeff_L1ls(coeff_L1ls_nonzero_idx);
 mu_reduced = mu(coeff_L1ls_nonzero_idx, :);
-mu_normals_reduced = mu_normals(coeff_L1ls_nonzero_idx, :);
 SIGMA_reduced = SIGMA(:, coeff_L1ls_nonzero_idx, :, :);
 
 % reconstruct the target function from the reduced data
-plot_approx(mu_reduced, mu_normals_reduced, SIGMA_reduced, ...
+plot_approx(mu_reduced, SIGMA_reduced, ...
             coeff_L1ls_reduced, corners, 'res', 200)

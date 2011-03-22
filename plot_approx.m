@@ -1,4 +1,4 @@
-function [ ] = plot_approx( x, normals, SIGMA, coeffs, corners, varargin )
+function [ ] = plot_approx( x, SIGMA, coeffs, corners, varargin )
 %PLOT_APPROX plot approximated function given by coefficients coeffs
 %   given by points x and covariance matrices SIGMA
 %
@@ -19,7 +19,6 @@ function [ ] = plot_approx( x, normals, SIGMA, coeffs, corners, varargin )
 ip = inputParser;
 
 ip.addRequired('x');
-ip.addRequired('normals');
 ip.addRequired('SIGMA');
 ip.addRequired('coeffs');
 ip.addRequired('corners');
@@ -29,7 +28,7 @@ ip.addParamValue('x_res', false);
 ip.addParamValue('y_res', false);
 ip.addParamValue('x_indices', false);
 
-ip.parse(x, normals, SIGMA, coeffs, corners, varargin{:});
+ip.parse(x, SIGMA, coeffs, corners, varargin{:});
 
 %% Post-process input arguments
 if any(strcmpi('x_res', ip.UsingDefaults))
@@ -54,7 +53,7 @@ end
                   linspace(corners(1,2), corners(2,2), y_res) );
 
 %% Evaluate function for coordinates
-A = measurement_matrix(x, normals, SIGMA, [X(:) Y(:)], ...
+A = measurement_matrix(x, SIGMA, [X(:) Y(:)], ...
     'compile', true ); % compile value generation code
 Z = A * coeffs;
 

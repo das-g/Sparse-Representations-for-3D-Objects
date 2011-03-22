@@ -1,16 +1,15 @@
-function A = measurement_matrix(mu, normals, SIGMA, x, varargin)
+function A = measurement_matrix(mu, SIGMA, x, varargin)
 
 %% Parse input arguments
 ip = inputParser;
 
 ip.addRequired('mu');
-ip.addRequired('normals');
 ip.addRequired('SIGMA');
 ip.addRequired('x');
 
 ip.addParamValue('compile', false);
 
-ip.parse(mu, normals, SIGMA, x, varargin{:});
+ip.parse(mu, SIGMA, x, varargin{:});
 
 %% Find nearest neighbors using ann library.
 % Save current path, so we can restore it later.
@@ -44,10 +43,10 @@ if ip.Results.compile
     % The sizes of passed parameters are not known in advance, so we compile
     % measurement_matrix_values just before calling it. For large n or p_nn
     % this still pays off.
-    emlmex -o mmv_compiled measurement_matrix_values -eg {mu, normals, SIGMA, x, nnidx}
+    emlmex -o mmv_compiled measurement_matrix_values -eg {mu, SIGMA, x, nnidx}
     
     % Call compiled function.
-    A_values = mmv_compiled(mu, normals, SIGMA, x, nnidx);
+    A_values = mmv_compiled(mu, SIGMA, x, nnidx);
 else
     %% Caller didn't request compile
     % Make sure we'll call the *.m file, not a compiled function.
@@ -55,7 +54,7 @@ else
            'Please delete the measurement_matrix_values MEX file.')
     
     % Call it.
-    A_values = measurement_matrix_values(mu, normals, SIGMA, x, nnidx);
+    A_values = measurement_matrix_values(mu, SIGMA, x, nnidx);
 end
 
 %% Compose measurement matrix

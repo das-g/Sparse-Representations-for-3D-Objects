@@ -1,4 +1,4 @@
-function A = measurement_matrix_values(mu, normals, SIGMA, x, nnidx) %#eml
+function A = measurement_matrix_values(mu, SIGMA, x, nnidx) %#eml
 
 [n dim] = size(x);
 p_nn = size(nnidx,1);
@@ -21,9 +21,7 @@ for i = 1:n
         % computation for those.
         if j > 0
             kernel_value = gauss(x(i, :), mu(j, :), reshape(SIGMA(:,j,:,:), [dim dim]));
-            A(i, j_) = dot(normals(j,:), ...
-                          x(i,:) - mu(j,:), ...
-                          2) * kernel_value;
+            A(i, j_) = kernel_value;
             denominator = denominator + kernel_value;
         end
     end
