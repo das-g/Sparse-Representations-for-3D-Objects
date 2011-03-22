@@ -8,8 +8,6 @@ A = zeros(n,p_nn);
 for i = 1:n
     neighborMuIndices = nnidx(:, i);
     
-    denominator = 0; % for normalization
-    
     j_ = 0; % Index into neighborMuIndices for the neighbor we're
             % currently considering.
     
@@ -22,8 +20,6 @@ for i = 1:n
         if j > 0
             kernel_value = gauss(x(i, :), mu(j, :), reshape(SIGMA(:,j,:,:), [dim dim]));
             A(i, j_) = kernel_value;
-            denominator = denominator + kernel_value;
         end
     end
-    A(i, :) = A(i, :) ./ denominator;
 end
