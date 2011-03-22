@@ -44,7 +44,7 @@ goal_sigma = 130;
 % scatter(x(:,1),x(:,2),'.r')
 
 % Query points MUST be measurement points, reference points MUST be kernel centers,
-% NOT the other waz around. Else only the nearest k measurement points
+% NOT the other way around. Else only the nearest k measurement points
 % would 'see' a given kernel.
 Xq = x; % query points, use input points for now
 
