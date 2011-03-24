@@ -1,4 +1,4 @@
-res = 400
+res = 400;
 
 data = load('../test/cartman.npoff');
 x = data(:,1:2);
@@ -66,7 +66,7 @@ old_path = path;
 addpath([pwd '/../spgl1-1.7'])
 
 tau = n/20;
-coeff_spgl1 = spg_lasso(A, rhs, tau);
+coeff_spgl1 = spg_lasso(A, rhs, tau, struct('verbosity', 0));
 
 path(old_path)
 
