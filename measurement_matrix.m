@@ -1,32 +1,65 @@
-function A = measurement_matrix(mu, normals, SIGMA, x)
+function A = measurement_matrix(mu, normals, SIGMA, x, varargin)
 
+%% Parse input arguments
+ip = inputParser;
+
+ip.addRequired('mu');
+ip.addRequired('normals');
+ip.addRequired('SIGMA');
+ip.addRequired('x');
+
+ip.addParamValue('compile', false);
+
+ip.parse(mu, normals, SIGMA, x, varargin{:});
+
+%% Find nearest neighbors using ann library.
+% Save current path, so we can restore it later.
 old_path = path;
-addpath([pwd '/../ann_mwrapper/extension'])
 
-[mu_kdtree, pts] = annConstructTree(mu');
+% Change path, so that ann wrapper files are found.
+addpath([pwd '/../ann_mwrapper']) % Full path needed, so prepend working dir
 
-[n dim] = size(x);
-p = size(mu,1);
+% Query for nearest 10 mu for each x.
+nnidx = annquery(mu', x', 10);
 
-A = sparse(n,p);
+% Clean up. (Restore previous path.)
+path(old_path)
 
-for i = 1:n
-    neighborMuIndices = annFindKnn(mu_kdtree, x(i, :)', 10, 0, 0);
-    % The i'th measurement point might have less than size(nnidx, 1)
-    % neighbors. Eliminate empty idx entires
-    neighborMuIndices = neighborMuIndices(neighborMuIndices > 0);
+%% Determine sizes of input arguments
+n = size(x, 1);
+p = size(mu, 1);
+p_nn = size(nnidx, 1);
+
+%% Indices of measurement matrix' non-zero values
+A_i = repmat((1:n)', [1 p_nn]);
+A_j = double(nnidx');
+
+%% (Non-zero) values of measurement matrix
+% We call measurement_matrix_values to get the values. For large n and/or
+% large p_nn, it pays off to compile it, first. The caller can request
+% compilation by passing ..., 'compile', true.
+
+if ip.Results.compile
+    %% Caller requested compile
+    % The sizes of passed parameters are not known in advance, so we compile
+    % measurement_matrix_values just before calling it. For large n or p_nn
+    % this still pays off.
+    emlmex -o mmv_compiled measurement_matrix_values -eg {mu, normals, SIGMA, x, nnidx}
     
-    denominator = 0; % for normalization
+    % Call compiled function.
+    A_values = mmv_compiled(mu, normals, SIGMA, x, nnidx);
+else
+    %% Caller didn't request compile
+    % Make sure we'll call the *.m file, not a compiled function.
+    assert(exist('measurement_matrix_values', 'file') == 2, ... Check whether *.m function.
+           'Please delete the measurement_matrix_values MEX file.')
     
-    for j=neighborMuIndices'
-        kernel_value = gauss(x(i, :), mu(j, :), reshape(SIGMA(:,j,:,:), [dim dim]));
-        A(i,j) = dot(normals(j,:), ...
-                                x(i,:) - mu(j,:), ...
-                                2) * kernel_value;
-        denominator = denominator + kernel_value;
-    end
-    A(i, neighborMuIndices) = A(i, neighborMuIndices) ./ denominator;
+    % Call it.
+    A_values = measurement_matrix_values(mu, normals, SIGMA, x, nnidx);
 end
 
-annDeleteTree(mu_kdtree, pts)
-path(old_path)
+%% Compose measurement matrix
+A = sparse(A_i(nnidx' > 0), ...
+           A_j(nnidx' > 0), ...
+           A_values(nnidx' > 0), ...
+           n, p);

@@ -40,4 +40,3 @@ end
 grad_f = numerator ./ repmat(denominator, [1 d]);
 
 end
-

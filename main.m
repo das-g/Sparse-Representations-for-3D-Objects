@@ -29,26 +29,17 @@ goal_sigma = 130;
                 'centers_to_points_ratio', 1, ...
                 'max_steps', 40);
 
-smoothed_normals = ...
-grad_weighted_signed_distance_fu(x, x_normals, ...
-                                 repmat(reshape(eye(2) * start_sigma^2, ...
-                                                [1 2 2]), ...
-                                        [size(x,1) 1 1]), ...
-                                 mu);
-% normalize normals
-smoothed_normals = smoothed_normals ./ repmat(sqrt(smoothed_normals(:,1).^2+smoothed_normals(:,2).^2), [1 2]);
-
 % plot_f(mu, mu_normals, squeeze(SIGMA), corners, 'res',res)
 % hold
 % quiver(mu(:,1),mu(:,2),mu_normals(:,1),mu_normals(:,2),'color','black')
 % scatter(x(:,1),x(:,2),'.r')
 
 % Query points MUST be measurement points, reference points MUST be kernel centers,
-% NOT the other waz around. Else only the nearest k measurement points
+% NOT the other way around. Else only the nearest k measurement points
 % would 'see' a given kernel.
-Xq = [x - smoothed_normals * start_sigma * 0.5;
+Xq = [x - x_normals * start_sigma * 0.5;
       x;
-      x + smoothed_normals * start_sigma * 0.5]; % query points
+      x + x_normals * start_sigma * 0.5]; % query points
 %mu = x; % reference points, use input points for now
 mu_normals = x_normals; % normals at reference points (i.e. at kernel centers)
 
