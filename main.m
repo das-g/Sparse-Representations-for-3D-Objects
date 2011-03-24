@@ -63,24 +63,22 @@ rhs = weighted_signed_distance_fu( mu, mu_normals, ...
                                                   [1 dim dim]), ...
                                    [p 1 1]), Xq );
 old_path = path;
-addpath([pwd '/../l1_ls_matlab'])
+addpath([pwd '/../spgl1-1.7'])
 
-lambda = 0.01;
-[coeff_L1ls status] = l1_ls(A, rhs, lambda, 1e-3);
+tau = n/20;
+coeff_spgl1 = spg_lasso(A, rhs, tau);
 
 path(old_path)
 
-assert(all(status == 'Solved'))
-
 % sparsify (eliminate almost-zero entries)
 threshold = 0.1;
-coeff_L1ls_nonzero_idx = abs(coeff_L1ls) > threshold; % vector of booleans
+coeff_spgl1_nonzero_idx = abs(coeff_spgl1) > threshold; % vector of booleans
 
-coeff_L1ls_reduced = coeff_L1ls(coeff_L1ls_nonzero_idx);
-mu_reduced = mu(coeff_L1ls_nonzero_idx, :);
-mu_normals_reduced = mu_normals(coeff_L1ls_nonzero_idx, :);
-SIGMA_reduced = SIGMA(:, coeff_L1ls_nonzero_idx, :, :);
+coeff_spgl1_reduced = coeff_spgl1(coeff_spgl1_nonzero_idx);
+mu_reduced = mu(coeff_spgl1_nonzero_idx, :);
+mu_normals_reduced = mu_normals(coeff_spgl1_nonzero_idx, :);
+SIGMA_reduced = SIGMA(:, coeff_spgl1_nonzero_idx, :, :);
 
 % reconstruct the target function from the reduced data
 plot_approx(mu_reduced, mu_normals_reduced, SIGMA_reduced, ...
-            coeff_L1ls_reduced, corners, 'res', 200)
+            coeff_spgl1_reduced, corners, 'res', 200)
