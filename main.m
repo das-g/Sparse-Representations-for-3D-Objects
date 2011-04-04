@@ -1,6 +1,6 @@
 res = 400;
 
-data = load('../test/cartman.npoff');
+data = load('../Data/2D/arrow01.npoff');
 x = data(:,1:2);
 x_normals = data(:,3:4);
 
@@ -27,7 +27,10 @@ goal_sigma = 130;
                 'initial_sigma', start_sigma, ...
                 'target_sigma', goal_sigma, ...
                 'centers_to_points_ratio', 1, ...
-                'max_steps', 40);
+                'max_steps', 40, ...
+                'step_plot', @(mu, SIGMA, step) ...
+                             kernel_step_plot(mu, SIGMA, step, corners) ...
+               );
 
 % plot_f(mu, mu_normals, squeeze(SIGMA), corners, 'res',res)
 % hold
@@ -75,3 +78,6 @@ SIGMA_reduced = SIGMA(:, coeff_L1ls_nonzero_idx, :, :);
 % reconstruct the target function from the reduced data
 plot_approx(mu_reduced, mu_normals_reduced, SIGMA_reduced, ...
             coeff_L1ls_reduced, corners, 'res', 200)
+
+hold on
+scatter(x(:,1), x(:,2))

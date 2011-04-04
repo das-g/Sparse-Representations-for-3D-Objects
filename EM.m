@@ -60,7 +60,7 @@ for step=1:ip.Results.max_steps
             ./ (2 * ip.Results.a + n * repmat(pi_j,[1 1 dim dim]));
 
     %% Plot intermediate results
-    ip.Results.step_plot(mu,squeeze(SIGMA));
+    ip.Results.step_plot(mu,squeeze(SIGMA),step);
 end
 
 %% Plot final results
