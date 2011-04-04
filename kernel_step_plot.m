@@ -12,6 +12,10 @@ if any(step == plot_steps) % plot the current step?
     hold on
     scatter(mu(:, 1), mu(:, 2))
     scatter(mu(observe_idx, 1), mu(observe_idx, 2), 'red')
+    
+    saveas(gcf, ... current figure
+           ['kernel_EM-step' int2str(step) '.fig'])
+    close(gcf)
 end
 
 end
