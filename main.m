@@ -11,6 +11,7 @@ corners = (corners - repmat(center,[2 1])) * 1.2 + repmat(center,[2 1]);
 sigma_range = 1:0.3:15;
 
 errors = zeros(size(sigma_range));
+num_coeffs_reduced = zeros(size(sigma_range));
 
 for i = 1:length(sigma_range)
 
@@ -83,5 +84,8 @@ for i = 1:length(sigma_range)
                                    Xq);
     error = A_reduced * coeff_L1ls_reduced - rhs;
     errors(i) = sum( error .^ 2 );
+
+    % Record number of kept coefficients
+    num_coeffs_reduced(i) = numel(coeff_L1ls_reduced);
 
 end
