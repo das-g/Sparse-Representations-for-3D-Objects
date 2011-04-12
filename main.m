@@ -9,7 +9,6 @@ center = mean(corners,1);
 corners = (corners - repmat(center,[2 1])) * 1.2 + repmat(center,[2 1]);
 
 start_sigma = 7;
-goal_sigma = 130;
 
 % plot_f(x, x_normals, ...
 %        repmat(reshape(eye(2) * start_sigma^2, ...
