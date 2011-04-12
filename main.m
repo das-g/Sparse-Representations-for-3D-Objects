@@ -10,6 +10,8 @@ corners = (corners - repmat(center,[2 1])) * 1.2 + repmat(center,[2 1]);
 
 sigma_range = 1:0.3:15;
 
+errors = zeros(size(sigma_range));
+
 for i = 1:length(sigma_range)
 
     start_sigma = sigma_range(i);
@@ -73,8 +75,13 @@ for i = 1:length(sigma_range)
     mu_normals_reduced = mu_normals(coeff_L1ls_nonzero_idx, :);
     SIGMA_reduced = SIGMA(:, coeff_L1ls_nonzero_idx, :, :);
 
-    % reconstruct the target function from the reduced data
-    plot_approx(mu_reduced, mu_normals_reduced, SIGMA_reduced, ...
-                coeff_L1ls_reduced, corners, 'res', 200)
+    % Measure the error of the reconstructed distance fu. at surface points
+    % (from input) and off-surface points (generated from normals).
+    A_reduced = measurement_matrix(mu_reduced, ...
+                                   mu_normals_reduced, ...
+                                   SIGMA_reduced, ...
+                                   Xq);
+    error = A_reduced * coeff_L1ls_reduced - rhs;
+    errors(i) = sum( error .^ 2 );
 
 end
