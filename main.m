@@ -1,6 +1,6 @@
 res = 400;
 
-data = load('../test/cartman.npoff');
+data = load('../Data/2D/arrow01.npoff');
 x = data(:,1:2);
 x_normals = data(:,3:4);
 
