@@ -1,6 +1,6 @@
 res = 400;
 
-data = load('../Data/2D/arrow01.npoff');
+data = load('../Data/2D/freq01.npoff');
 x = data(:,1:2);
 x_normals = data(:,3:4);
 
@@ -90,6 +90,6 @@ for i = 1:length(sigma_range)
 
 end
 
-save('sigma_measurements_1.mat', 'sigma_range', ...
+save('sigma_measurements_2.mat', 'sigma_range', ...
                                  'errors', ...
                                  'num_coeffs_reduced')
