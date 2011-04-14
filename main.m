@@ -89,3 +89,7 @@ for i = 1:length(sigma_range)
     num_coeffs_reduced(i) = numel(coeff_L1ls_reduced);
 
 end
+
+save('sigma_measurements_1.mat', 'sigma_range', ...
+                                 'errors', ...
+                                 'num_coeffs_reduced')
