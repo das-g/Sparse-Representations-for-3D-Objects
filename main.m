@@ -21,12 +21,14 @@ goal_sigma = 130;
 % 
 % figure
 
+disp('EM start')
 [mu SIGMA] = EM(x, ...
                 'a', 0.01, ...
                 'initial_sigma', start_sigma, ...
                 'target_sigma', goal_sigma, ...
                 'centers_to_points_ratio', 1, ...
                 'max_steps', 40);
+disp('EM done')
 
 % plot_f(mu, mu_normals, squeeze(SIGMA), corners, 'res',res)
 % hold
@@ -44,19 +46,26 @@ mu_normals = x_normals; % normals at reference points (i.e. at kernel centers)
 
 p = size(mu,1);
 
+disp('Measurement Matrix start')
 A = measurement_matrix(mu, mu_normals, SIGMA, Xq, ...
                        'compile', true);
+disp('Measurement Matrix done')
 
+disp('RHS start')
 % right-hand side (measured f)
 rhs = weighted_signed_distance_fu( x, x_normals, ...
                                    repmat(reshape(eye(dim) * start_sigma^2, ...
                                                   [1 dim dim]), ...
                                    [p 1 1]), Xq );
+disp('RHS done\n')
+
 old_path = path;
 addpath([pwd '/../l1_ls_matlab'])
 
 lambda = 0.01;
+disp('L1 start')
 [coeff_L1ls status] = l1_ls(A, rhs, lambda, 1e-3, true);
+disp('L1 done')
 
 path(old_path)
 

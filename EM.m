@@ -43,6 +43,7 @@ ip.Results.pre_plot(mu,squeeze(SIGMA));
 
 %% EM Iteration
 for step=1:ip.Results.max_steps
+    disp(['EM iteration ' int2str(step)])
     %% E-step
     pi_ij=zeros(n,p);
     for j=1:p
