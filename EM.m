@@ -55,7 +55,11 @@ for step=1:ip.Results.max_steps
     %mu = (pi_ij' * x) ./ repmat(n * pi_j', [1 dim]);
     tmp = repmat(reshape(x,[n 1 dim]),[1 p 1]) ...
         - repmat(shiftdim(mu,-1),[n 1 1]);
-    S_j = dot(repmat(repmat(pi_ij, [1 1 dim]) .* tmp,[1 1 1 dim]),repmat(reshape(tmp,[n p 1 dim]),[1 1 dim 1]), 1);
+        S_j = zeros(1, p, dim, dim);
+    for j=1:p
+        S_j(:,j,:,:) = dot(repmat(repmat(pi_ij(:,j), [1 1 dim]) .* tmp(:,j,:),[1 1 1 dim]), ...
+                           repmat(reshape(tmp(:,j,:),[n 1 1 dim]),[1 1 dim 1]), 1);
+    end
     SIGMA = (2 * ip.Results.a * repmat(shiftdim(S_x,-2),[1 p 1 1]) + S_j) ...
             ./ (2 * ip.Results.a + n * repmat(pi_j,[1 1 dim dim]));
 

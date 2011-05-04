@@ -1,8 +1,6 @@
 res = 400;
 
-data = load('../test/cartman.npoff');
-x = data(:,1:2);
-x_normals = data(:,3:4);
+[ x, x_normals ] = load_apts('../Data/3D/Rabbit.apts');
 
 [n dim] = size(x);
 corners = [min(x); max(x)];
@@ -46,7 +44,8 @@ mu_normals = x_normals; % normals at reference points (i.e. at kernel centers)
 
 p = size(mu,1);
 
-A = measurement_matrix(mu, mu_normals, SIGMA, Xq);
+A = measurement_matrix(mu, mu_normals, SIGMA, Xq, ...
+                       'compile', true);
 
 % right-hand side (measured f)
 rhs = weighted_signed_distance_fu( x, x_normals, ...
@@ -73,5 +72,5 @@ mu_normals_reduced = mu_normals(coeff_L1ls_nonzero_idx, :);
 SIGMA_reduced = SIGMA(:, coeff_L1ls_nonzero_idx, :, :);
 
 % reconstruct the target function from the reduced data
-plot_approx(mu_reduced, mu_normals_reduced, SIGMA_reduced, ...
-            coeff_L1ls_reduced, corners, 'res', 200)
+%plot_approx(mu_reduced, mu_normals_reduced, SIGMA_reduced, ...
+%            coeff_L1ls_reduced, corners, 'res', 200)
