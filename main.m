@@ -10,7 +10,7 @@ center = mean(corners,1);
 corners = (corners - repmat(center,[2 1])) * 1.2 + repmat(center,[2 1]);
 
 start_sigma_factor = 1.105;
-goal_sigma = 130;
+goal_sigma = min(corners(2,:) - corners(1,:)) / 5;
 
 %% Find distances to nearest neighbor using ann library.
 % Save current path, so we can restore it later.
