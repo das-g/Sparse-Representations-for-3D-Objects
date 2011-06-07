@@ -1,8 +1,9 @@
 function [ result ] = gauss_mix_eval( mu, SIGMA, x )
-%Evaluate the gaussian mixture probability density function
+% Evaluate the unweighted gaussian mixture probability density function
+%
 %   Evaluate the gaussian mixture probability density function given by the
 %   centers mu and the corresponding covariance matrices SIGMA at
-%   position x
+%   position(s) x
 %
 %       mu      is a p-by-d matrix where each of the p rows represents the
 %               (d-dimensional) position of a center
@@ -12,6 +13,8 @@ function [ result ] = gauss_mix_eval( mu, SIGMA, x )
 %
 %       x       n-by-d array where each of the n rows represents a position
 %               where the function shall be evaluated
+%
+%   See also: gauss, plot_gauss_mix
 
 p = size(mu,1);
 n = size(x,1);

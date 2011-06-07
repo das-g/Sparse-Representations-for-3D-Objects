@@ -1,6 +1,22 @@
 function [ mu SIGMA ] = EM( x, varargin)
-%EM Summary of this function goes here
-%   Detailed explanation goes here
+% Compute kernels of a multivariate guassian mixture approximating a point
+% cloud, using a modified estimation maximization algorithm.
+%
+% [mu, SIGMA] = EM(x)
+%
+% Input:
+%       x   n-by-d array, positions of points in point cloud
+%
+% Outputs:
+%       mu  n-by-d array, positions of kernels
+%
+%       SIGMA
+%           n-by-d-by-d array; SIGMA(j,:,:) is the covariance matrix
+%           corresponding to the jth kernel.
+%
+% EM also takes a set of optional arguments as 'name',value pairs.
+%
+% See also: plot_gauss_mix, gauss_mix_eval
 
 %% Parse input arguments
 ip = inputParser;

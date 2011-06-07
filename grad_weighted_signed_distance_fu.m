@@ -1,5 +1,7 @@
 function [ grad_f ] = grad_weighted_signed_distance_fu( mu, normals, SIGMA, x )
 %Compute the gradient of the weighted signed distance function (with gauss kernels)
+%
+%   value = GRAD_WEIGHTED_SIGNED_DISTANCE_FU(mu, normals, SIGMA, x)
 %   Compute the gradient of the weighted signed distance function
 %   (for gauss kernels at centers mu with covariance matrices SIGMA)
 %   at position x
@@ -16,6 +18,8 @@ function [ grad_f ] = grad_weighted_signed_distance_fu( mu, normals, SIGMA, x )
 %
 %       x       n-by-d array where each of the n rows represents a position
 %               where the function shall be evaluated
+%
+% See also: weighted_signed_distance_fu
 
 [p d] = size(mu);
 n = size(x,1);

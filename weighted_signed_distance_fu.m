@@ -1,5 +1,7 @@
 function [ f ] = weighted_signed_distance_fu( mu, normals, SIGMA, x )
-%Compute the weighted signed distance function (with gauss kernels)
+% Compute the weighted signed distance function (with gauss kernels)
+%
+%   value = WEIGHTED_SIGNED_DISTANCE_FU(mu, normals, SIGMA, x)
 %   Compute the weighted signed distance function (for gauss kernels at
 %   centers mu with covariance matrices SIGMA) at position x
 %
@@ -15,6 +17,8 @@ function [ f ] = weighted_signed_distance_fu( mu, normals, SIGMA, x )
 %
 %       x       n-by-d array where each of the n rows represents a position
 %               where the function shall be evaluated
+%
+% See also: grad_weighted_signed_distance_fu, plot_f
 
 p = size(mu,1);
 n = size(x,1);
