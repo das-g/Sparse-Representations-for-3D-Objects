@@ -24,4 +24,6 @@ for j=1:p
     result = result + gauss(x, repmat(mu(j,:), [n 1]), squeeze(SIGMA(j,:,:)));
 end
 
+result = result / p;
+
 end
