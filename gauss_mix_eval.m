@@ -19,5 +19,7 @@ for j=1:p
     result = result + gauss(x, mu(j,:), squeeze(SIGMA(j,:,:)));
 end
 
+result = result / p;
+
 end
 
