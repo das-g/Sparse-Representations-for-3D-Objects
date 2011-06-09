@@ -8,7 +8,9 @@ function [ phi ] = gauss( x, mu, Sigma) %#eml
 %       mu      1-by-d vector representing the (d-dimensional) position of
 %               the center
 %
-%       Sigma   the d-by-d matrix covariance matrix
+%       Sigma   the d-by-d matrix covariance matrix. A valid covariance
+%               matrix must be positive-semidefinite. There will be no
+%               warning when the passed matrix isn't.
 %
 %       x       1-by-d vector representing the position where the function
 %               shall be evaluated
@@ -23,7 +25,9 @@ function [ phi ] = gauss( x, mu, Sigma) %#eml
 %               multivariate Gauss distributions
 %
 %       Sigma   is a d-by-d matrix covariance matrix, shared by all n
-%               evaluated functions
+%               evaluated functions. A valid covariance matrix must be
+%               positive-semidefinite. There will be no warning when the
+%               passed matrix isn't.
 %
 %       xs      n-by-d array where the ith row represents the position
 %               where the ith function shall be evaluated

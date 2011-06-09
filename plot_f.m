@@ -12,7 +12,9 @@ function [ ] = plot_f( x, normals, SIGMA, corners, varargin )
 %               at a center
 %
 %       SIGMA   is a n-by-d-by-d array where SIGMA(i,:,:) is the d-by-d
-%               covariance matrix corresponding to the i-th point
+%               covariance matrix corresponding to the i-th point. A valid
+%               covariance matrix must be positive-semidifinite. There will
+%               be no warning when the passed matrices aren't.
 %
 %       corners matrix indicating the boundary of the area to be plotted.
 %               Structure: [ <left edge> , <lower edge>;

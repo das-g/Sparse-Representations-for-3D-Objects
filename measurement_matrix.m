@@ -11,7 +11,9 @@ function A = measurement_matrix(mu, normals, SIGMA, x, varargin)
 %               at a center
 %
 %       SIGMA   is a p-by-d-by-d array where SIGMA(i,:,:) is the d-by-d
-%               covariance matrix corresponding to the i-th point
+%               covariance matrix corresponding to the i-th point. A valid
+%               covariance matrix must be positive-semidefinite. There will
+%               be no warning when the passe matrices aren't.
 %
 %       x       is a n-by-d matrix, where each of the n rows represents a
 %               measurement point

@@ -7,7 +7,9 @@ function [ ] = plot_gauss_mix( mu, SIGMA, corners, varargin )
 %               (d-dimensional) position of a center
 %
 %       SIGMA   is a p-by-d-by-d array where SIGMA(j,:,:) is the d-by-d
-%               covariance matrix corresponding to the j-th center
+%               covariance matrix corresponding to the j-th center. A valid
+%               covariance matrix must be positive-semidefinite. There will
+%               be no warning when the passed matrices aren't.
 %
 %       corners matrix indicating the boundary of the area to be plotted.
 %               Structure: [ <left edge> , <lower edge>;

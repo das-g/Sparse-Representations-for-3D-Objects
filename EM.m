@@ -12,7 +12,9 @@ function [ mu SIGMA ] = EM( x, varargin)
 %
 %       SIGMA
 %           n-by-d-by-d array; SIGMA(j,:,:) is the covariance matrix
-%           corresponding to the jth kernel.
+%           corresponding to the jth kernel. A valid covariance matrix must
+%           be positive-semidefinite. There will be no warning when the
+%           passed matrices aren't.
 %
 % EM also takes a set of optional arguments as 'name',value pairs.
 %

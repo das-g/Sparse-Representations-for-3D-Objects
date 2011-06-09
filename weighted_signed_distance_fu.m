@@ -13,7 +13,9 @@ function [ f ] = weighted_signed_distance_fu( mu, normals, SIGMA, x )
 %               at a center
 %
 %       SIGMA   is a p-by-d-by-d array where SIGMA(j,:,:) is the d-by-d
-%               covariance matrix corresponding to the j-th center
+%               covariance matrix corresponding to the j-th center. A valid
+%               covariance matrix must be positive-semidefinite. There will
+%               be no warning when the passed matrices aren't.
 %
 %       x       n-by-d array where each of the n rows represents a position
 %               where the function shall be evaluated
