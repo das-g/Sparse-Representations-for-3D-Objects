@@ -1,4 +1,28 @@
 function A = measurement_matrix(mu, normals, SIGMA, x, varargin)
+% Compute measurement matrix.
+%
+%   A = MEASUREMENT_MATRIX(mu, normals, SIGMA, x)
+%
+%       mu      is a p-by-d matrix where each of the p rows represents the
+%               (d-dimensional) position of a center
+%
+%       normals is a p-by-d matrix where each of the p rows represents the
+%               (d-dimensional) directed normal of the zero-isosurface
+%               at a center
+%
+%       SIGMA   is a p-by-d-by-d array where SIGMA(i,:,:) is the d-by-d
+%               covariance matrix corresponding to the i-th point. A valid
+%               covariance matrix must be positive-semidefinite. There will
+%               be no warning when the passe matrices aren't.
+%
+%       x       is a n-by-d matrix, where each of the n rows represents a
+%               measurement point
+%
+%   A = MEASUREMENT_MATRIX(mu, normals, SIGMA, x, 'compile', true)
+%           Same as above, but compile parts of the computation before
+%           performing it. This speeds up the computations in question but
+%           needs some (constant) time for the compiling itself, so this
+%           only pays off when either p or n or both are large.
 
 %% Parse input arguments
 ip = inputParser;

@@ -1,12 +1,20 @@
 function [ ] = plot_approx( x, normals, SIGMA, coeffs, corners, varargin )
-%PLOT_APPROX plot approximated function given by coefficients coeffs
-%   given by points x and covariance matrices SIGMA
+% plot approximated function given by coefficients coeffs given by points x
+% and covariance matrices SIGMA
+%
+%   PLOT_APPROX(x, normals, SIGMA, coeffs, corners)
 %
 %       x       is a n-by-d matrix where each of the n rows represents the
 %               (d-dimensional) position of a center
 %
+%       normals is a n-by-d matrix where each of the n rows represents the
+%               (d-dimensional) directed normal of the zero-isosurface
+%               at a center
+%
 %       SIGMA   is a n-by-d-by-d array where SIGMA(i,:,:) is the d-by-d
-%               covariance matrix corresponding to the i-th point
+%               covariance matrix corresponding to the i-th point. A valid
+%               covariance matrix must be positive-semidefinite. There will
+%               be no warning when the passed matrices aren't.
 %
 %       coeffs  is a n-by-1 array contaning coefficients for weighting
 %               each basis function
@@ -14,6 +22,22 @@ function [ ] = plot_approx( x, normals, SIGMA, coeffs, corners, varargin )
 %       corners matrix indicating the boundary of the area to be plotted.
 %               Structure: [ <left edge> , <lower edge>;
 %                            <right edge>, <upper edge>  ]
+%
+%   PLOT_APPROX takes the following optional arguments as
+%   'name',value pairs, after the mandatory parameters:
+%
+%       res     height and width resolution of the plot; default: 100
+%
+%       x_res   width resolution of the plot, overrides res if given
+%
+%       y_res   height resolution of the plot, overrides res if given
+%
+%       x_indices
+%               (For debugging purposes.) If given, leave away all basis
+%               functions whose index is not listed in this parameter,
+%               otherwise plot the complete reconstruction.
+%
+% See also: plot_gauss_mix, EM
 
 %% Parse input arguments
 ip = inputParser;

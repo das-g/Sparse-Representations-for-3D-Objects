@@ -1,4 +1,8 @@
 function A = measurement_matrix_values(mu, normals, SIGMA, x, nnidx) %#eml
+% Do not call this helper function directly, unless you know what you're
+% doing. Use measurement_matrix instead.
+%
+% See also: measurement_matrix
 
 [n dim] = size(x);
 p_nn = size(nnidx,1);

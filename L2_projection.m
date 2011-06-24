@@ -1,3 +1,5 @@
+% Script for testing L1 minimization libraries.
+
 %% inputs
 f = @(x) gauss(x, 0, 25);
 
