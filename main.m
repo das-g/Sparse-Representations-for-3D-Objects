@@ -1,6 +1,14 @@
+function [] = main(filename_snippet, serial_no, doEM)
+
+if doEM
+    disp(['=== START ' filename_snippet ' (' serial_no ') with EM  ==='])
+else
+    disp(['=== START ' filename_snippet ' (' serial_no ') without EM  ==='])
+end
+
 res = 400;
 
-[ x, x_normals ] = load_apts('../Data/3D/Rabbit.apts');
+[ x, x_normals ] = load_apts(['../Data/3D/' filename_snippet '.apts']);
 
 [n dim] = size(x);
 corners = [min(x); max(x)];
@@ -43,14 +51,24 @@ start_sigma = max( dists(2, :) ) * start_sigma_factor;
 % 
 % figure
 
-disp('EM start')
-[mu SIGMA] = EM(x, ...
-                'a', 0.01, ...
-                'initial_sigma', start_sigma, ...
-                'target_sigma', goal_sigma, ...
-                'centers_to_points_ratio', 1, ...
-                'max_steps', 40);
-disp('EM done')
+if doEM
+    disp('EM start')
+    output_filename_addition = ''; % nothing to add, this is our default
+    [mu SIGMA] = EM(x, ...
+                    'a', 0.01, ...
+                    'initial_sigma', start_sigma, ...
+                    'target_sigma', goal_sigma, ...
+                    'centers_to_points_ratio', 1, ...
+                    'max_steps', 40);
+    disp('EM done')
+else
+    disp('(skipping EM, using spherical kernels)')
+    output_filename_addition = '_noEM'; % so that we know EM was skipped
+    mu = x;
+    SIGMA = repmat(reshape(eye(dim) * start_sigma^2, ...
+                           [1 1 dim dim]), ...
+                   [1 size(x,1) 1 1]);
+end
 
 % plot_f(mu, mu_normals, squeeze(SIGMA), corners, 'res',res)
 % hold
@@ -105,6 +123,11 @@ SIGMA_reduced = SIGMA(:, coeff_L1ls_nonzero_idx, :, :);
 % reconstruct the target function from the reduced data
 %plot_approx(mu_reduced, mu_normals_reduced, SIGMA_reduced, ...
 %            coeff_L1ls_reduced, corners, 'res', 200)
-save('workspace4.mat')
-txt_output('Rabbit_output4.txt', coeff_L1ls, SIGMA, mu, mu_normals)
-txt_output('Rabbit_output4_reduced.txt', coeff_L1ls_reduced, SIGMA_reduced, mu_reduced, mu_normals_reduced)
+txt_output([filename_snippet '_output' serial_no output_filename_addition '.txt'], coeff_L1ls, SIGMA, mu, mu_normals)
+txt_output([filename_snippet '_output' serial_no output_filename_addition '_reduced.txt'], coeff_L1ls_reduced, SIGMA_reduced, mu_reduced, mu_normals_reduced)
+
+if doEM
+    disp(['=== END ' filename_snippet ' (' serial_no ') with EM ==='])
+else
+    disp(['=== END ' filename_snippet ' (' serial_no ') without EM ==='])
+end
