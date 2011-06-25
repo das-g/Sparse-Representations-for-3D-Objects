@@ -106,3 +106,5 @@ SIGMA_reduced = SIGMA(:, coeff_L1ls_nonzero_idx, :, :);
 %plot_approx(mu_reduced, mu_normals_reduced, SIGMA_reduced, ...
 %            coeff_L1ls_reduced, corners, 'res', 200)
 save('workspace4.mat')
+txt_output('Rabbit_output4.txt', coeff_L1ls, SIGMA, mu, mu_normals)
+txt_output('Rabbit_output4_reduced.txt', coeff_L1ls_reduced, SIGMA_reduced, mu_reduced, mu_normals_reduced)

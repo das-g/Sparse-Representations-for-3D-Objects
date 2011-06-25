@@ -1,6 +1,8 @@
-n = size(coeff_L1ls, 1);
+function [] = txt_output(filename, coeffs, SIGMA, mu, mu_normals)
 
-fileID = fopen('output_data.txt','w');
+n = size(coeffs, 1);
+
+fileID = fopen(filename,'w');
 
 fprintf(fileID, [num2str(n), '\r\n']);
 
@@ -15,9 +17,11 @@ for i=1:n
         ' ', ...
         num2str(mu_normals(i,:)), ...
         ' ', ...
-	num2str(coeff_L1ls(i,:)), ...
+	num2str(coeffs(i,:)), ...
 	'\r\n'
     ]);
 end
 
 fclose(fileID);
+
+end
