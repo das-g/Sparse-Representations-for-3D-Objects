@@ -89,5 +89,8 @@ Z = reshape(Z, y_res, x_res);
 figure
 imagesc([X(1,1) X(1,end)], [Y(1,1) Y(end,1)], Z)
 set(gca,'YDir','normal')
+c = caxis;
+caxis(c - c([2 1]))
+colormap(myjet)
 
 end
