@@ -37,6 +37,7 @@ path(old_path)
 % sampling width and use it to set the initial kernel size.
 assert( all( dists(1, :) == 0) )
 start_sigma = max( dists(2, :) ) * start_sigma_factor;
+disp(['start_sigma=' num2str(start_sigma)])
 
 %%
 
@@ -102,7 +103,7 @@ disp('RHS done\n')
 old_path = path;
 addpath([pwd '/../l1_ls_matlab'])
 
-lambda = 0.001;
+lambda = 0.00001;
 disp('L1 start')
 [coeff_L1ls status] = l1_ls(A, rhs, lambda, 1e-3, true);
 disp('L1 done')

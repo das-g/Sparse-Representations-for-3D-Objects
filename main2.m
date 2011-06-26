@@ -1,4 +1,4 @@
-sNo = '1';
+sNo = '2';
 
 main('bun_05k', sNo, false)
 main('bun_15k', sNo, false)
