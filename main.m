@@ -102,7 +102,7 @@ disp('RHS done\n')
 old_path = path;
 addpath([pwd '/../l1_ls_matlab'])
 
-lambda = 0.01;
+lambda = 0.001;
 disp('L1 start')
 [coeff_L1ls status] = l1_ls(A, rhs, lambda, 1e-3, true);
 disp('L1 done')
