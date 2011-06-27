@@ -118,3 +118,11 @@ hold on
 scatter(x(:,1),x(:,2),'.k')
 scatter(mu_reduced(:,1),mu_reduced(:,2),'r')
 hold off
+
+%% plot input points, kept points and off-surface points
+figure
+scatter(Xq(:,1), Xq(:,2),'.','MarkerEdgeColor',[0 0.7 0.5])
+hold on
+scatter(x(:,1),x(:,2),'.k')
+scatter(mu_reduced(:,1),mu_reduced(:,2),'r')
+hold off
