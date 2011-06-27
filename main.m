@@ -2,7 +2,7 @@ res = 400;
 
 data = load('../test/organic_sub2.npoff');
 x = data(:,1:2);
-x_normals = data(:,3:4);
+x_normals = -data(:,3:4);
 
 [n dim] = size(x);
 corners = [min(x); max(x)];
