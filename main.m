@@ -1,4 +1,4 @@
-res = 200;
+res = 800;
 
 data = load('../test/organic_sub2.npoff');
 x = data(:,1:2);
