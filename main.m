@@ -35,6 +35,8 @@ start_sigma = max( dists(2, :) ) * start_sigma_factor;
 %% plot input
 figure
 scatter(x(:,1), x(:,2))
+set(gca,'XTick',[])
+set(gca,'YTick',[])
 hold on
 quiver(x(:,1),x(:,2),x_normals(:,1),x_normals(:,2),'color','black')
 hold off
@@ -49,6 +51,8 @@ plot_f(x, x_normals, ...
        corners, ...
        'res', res)
 colorbar
+set(gca,'XTick',[])
+set(gca,'YTick',[])
 hold on
 scatter(x(:,1),x(:,2),'.k')
 hold off
@@ -67,6 +71,8 @@ hold off
 %% plot signed distance fu with new kernels from EM
 plot_f(mu, x_normals, squeeze(SIGMA), corners, 'res',res)
 colorbar
+set(gca,'XTick',[])
+set(gca,'YTick',[])
 hold on
 % quiver(mu(:,1),mu(:,2),mu_normals(:,1),mu_normals(:,2),'color','black')
 scatter(x(:,1),x(:,2),'.k')
@@ -110,10 +116,13 @@ mu_reduced = mu(coeff_L1ls_nonzero_idx, :);
 mu_normals_reduced = mu_normals(coeff_L1ls_nonzero_idx, :);
 SIGMA_reduced = SIGMA(:, coeff_L1ls_nonzero_idx, :, :);
 
+
 %% reconstruct the target function from the reduced data
 plot_approx(mu_reduced, mu_normals_reduced, SIGMA_reduced, ...
             coeff_L1ls_reduced, corners, 'res', res)
 colorbar
+set(gca,'XTick',[])
+set(gca,'YTick',[])
 hold on
 scatter(x(:,1),x(:,2),'.k')
 hold off
@@ -121,3 +130,5 @@ hold off
 %% plot kept points
 figure
 scatter(mu_reduced(:,1),mu_reduced(:,2),'r')
+set(gca,'XTick',[])
+set(gca,'YTick',[])
