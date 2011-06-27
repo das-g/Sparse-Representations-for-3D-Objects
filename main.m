@@ -1,6 +1,6 @@
 res = 400;
 
-data = load('../test/cartman.npoff');
+data = load('../test/organic_sub2.npoff');
 x = data(:,1:2);
 x_normals = data(:,3:4);
 
@@ -10,7 +10,7 @@ center = mean(corners,1);
 corners = (corners - repmat(center,[2 1])) * 1.2 + repmat(center,[2 1]);
 
 start_sigma_factor = 1.105;
-goal_sigma = min(corners(2,:) - corners(1,:)) / 5;
+goal_sigma = min(corners(2,:) - corners(1,:)) / 20;
 
 %% Find distances to nearest neighbor using ann library.
 % Save current path, so we can restore it later.
@@ -78,7 +78,7 @@ rhs = weighted_signed_distance_fu( x, x_normals, ...
 old_path = path;
 addpath([pwd '/../l1_ls_matlab'])
 
-lambda = 0.01;
+lambda = 0.0001;
 [coeff_L1ls status] = l1_ls(A, rhs, lambda, 1e-3, true);
 
 path(old_path)
@@ -86,7 +86,7 @@ path(old_path)
 assert(all(status == 'Solved'))
 
 % sparsify (eliminate almost-zero entries)
-threshold = 0.1;
+threshold = 1.4;
 coeff_L1ls_nonzero_idx = abs(coeff_L1ls) > threshold; % vector of booleans
 
 coeff_L1ls_reduced = coeff_L1ls(coeff_L1ls_nonzero_idx);
