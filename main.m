@@ -32,19 +32,31 @@ path(old_path)
 assert( all( dists(1, :) == 0) )
 start_sigma = max( dists(2, :) ) * start_sigma_factor;
 
-%%
+%% plot input
+figure
+scatter(x(:,1), x(:,2))
+hold on
+quiver(x(:,1),x(:,2),x_normals(:,1),x_normals(:,2),'color','black')
+hold off
 
-% plot_f(x, x_normals, ...
-%        repmat(reshape(eye(dim) * start_sigma^2, ...
-%                       [1 dim dim]), ...
-%               [size(x,1) 1 1]), ...
-%        corners, ...
-%        'res', res)
-% hold
+corners = [xlim' ylim'];
+
+%% plot surface definition (signed distance fu. based on input)
+plot_f(x, x_normals, ...
+       repmat(reshape(eye(dim) * start_sigma^2, ...
+                      [1 dim dim]), ...
+              [size(x,1) 1 1]), ...
+       corners, ...
+       'res', res)
+colorbar
+hold on
+scatter(x(:,1),x(:,2),'.k')
+hold off
 % quiver(x(:,1),x(:,2),x_normals(:,1),x_normals(:,2),'color','black')
 % 
 % figure
 
+%% Run EM
 [mu SIGMA] = EM(x, ...
                 'a', 1/n, ...
                 'initial_sigma', start_sigma, ...
@@ -52,11 +64,15 @@ start_sigma = max( dists(2, :) ) * start_sigma_factor;
                 'centers_to_points_ratio', 1, ...
                 'max_steps', 40);
 
-% plot_f(mu, mu_normals, squeeze(SIGMA), corners, 'res',res)
-% hold
+%% plot signed distance fu with new kernels from EM
+plot_f(mu, x_normals, squeeze(SIGMA), corners, 'res',res)
+colorbar
+hold on
 % quiver(mu(:,1),mu(:,2),mu_normals(:,1),mu_normals(:,2),'color','black')
-% scatter(x(:,1),x(:,2),'.r')
+scatter(x(:,1),x(:,2),'.k')
+hold off
 
+%% Find approximately sparse coefficients with L1 minimization
 % Query points MUST be measurement points, reference points MUST be kernel centers,
 % NOT the other way around. Else only the nearest k measurement points
 % would 'see' a given kernel.
@@ -85,7 +101,7 @@ path(old_path)
 
 assert(all(status == 'Solved'))
 
-% sparsify (eliminate almost-zero entries)
+%% sparsify (eliminate kernels corresponding to low coefficients)
 threshold = 1.4;
 coeff_L1ls_nonzero_idx = abs(coeff_L1ls) > threshold; % vector of booleans
 
@@ -94,6 +110,11 @@ mu_reduced = mu(coeff_L1ls_nonzero_idx, :);
 mu_normals_reduced = mu_normals(coeff_L1ls_nonzero_idx, :);
 SIGMA_reduced = SIGMA(:, coeff_L1ls_nonzero_idx, :, :);
 
-% reconstruct the target function from the reduced data
+%% reconstruct the target function from the reduced data
 plot_approx(mu_reduced, mu_normals_reduced, SIGMA_reduced, ...
             coeff_L1ls_reduced, corners, 'res', res)
+colorbar
+hold on
+scatter(x(:,1),x(:,2),'.k')
+scatter(mu_reduced(:,1),mu_reduced(:,2),'r')
+hold off
