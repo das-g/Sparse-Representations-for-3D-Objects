@@ -1,4 +1,4 @@
-res = 400;
+res = 200;
 
 data = load('../test/organic_sub2.npoff');
 x = data(:,1:2);
@@ -96,4 +96,4 @@ SIGMA_reduced = SIGMA(:, coeff_L1ls_nonzero_idx, :, :);
 
 % reconstruct the target function from the reduced data
 plot_approx(mu_reduced, mu_normals_reduced, SIGMA_reduced, ...
-            coeff_L1ls_reduced, corners, 'res', 200)
+            coeff_L1ls_reduced, corners, 'res', res)
