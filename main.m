@@ -1,6 +1,7 @@
 res = 800;
-
-data = load('../test/organic_sub2.npoff');
+filenamesnippet = 'organic_sub2';
+serialNo = '_2';
+data = load(['../test/' filenamesnippet '.npoff']);
 x = data(:,1:2);
 x_normals = -data(:,3:4);
 
@@ -40,6 +41,10 @@ axis equal
 hold on
 quiver(x(:,1),x(:,2),x_normals(:,1),x_normals(:,2),'color','black')
 hold off
+set(gcf, 'PaperPositionMode', 'auto', ...
+         'units','normalized', ...
+         'outerposition',[0 0 1 1]) % maximize before saving
+saveas(gcf, [filenamesnippet serialNo '_input'], 'epsc')
 
 corners = [xlim' ylim'];
 
@@ -56,6 +61,10 @@ axis equal
 hold on
 scatter(x(:,1),x(:,2),'.k')
 hold off
+set(gcf, 'PaperPositionMode', 'auto', ...
+         'units','normalized', ...
+         'outerposition',[0 0 1 1]) % maximize before saving
+saveas(gcf, [filenamesnippet serialNo '_signed_distance_fu'], 'epsc')
 % quiver(x(:,1),x(:,2),x_normals(:,1),x_normals(:,2),'color','black')
 % 
 % figure
@@ -77,6 +86,10 @@ hold on
 % quiver(mu(:,1),mu(:,2),mu_normals(:,1),mu_normals(:,2),'color','black')
 scatter(x(:,1),x(:,2),'.k')
 hold off
+set(gcf, 'PaperPositionMode', 'auto', ...
+         'units','normalized', ...
+         'outerposition',[0 0 1 1]) % maximize before saving
+saveas(gcf, [filenamesnippet serialNo '_signed_distance_fu_after_EM'], 'epsc')
 
 %% Find approximately sparse coefficients with L1 minimization
 % Query points MUST be measurement points, reference points MUST be kernel centers,
@@ -122,6 +135,10 @@ figure
 scatter(mu_reduced(:,1),mu_reduced(:,2),'r')
 axis off
 axis equal
+set(gcf, 'PaperPositionMode', 'auto', ...
+         'units','normalized', ...
+         'outerposition',[0 0 1 1]) % maximize before saving
+saveas(gcf, [filenamesnippet serialNo '_kept_points'], 'epsc')
 
 %% reconstruct the target function from the reduced data
 plot_approx(mu_reduced, mu_normals_reduced, SIGMA_reduced, ...
@@ -132,3 +149,7 @@ axis equal
 hold on
 scatter(x(:,1),x(:,2),'.k')
 hold off
+set(gcf, 'PaperPositionMode', 'auto', ...
+         'units','normalized', ...
+         'outerposition',[0 0 1 1]) % maximize before saving
+saveas(gcf, [filenamesnippet serialNo 'reconstruction_from_reduced_data'], 'epsc')
