@@ -1,14 +1,13 @@
 function [] = EM_step_plot( mu, SIGMA, step, corners )
 
-if any([1 2 5 10 17 26 34 37 38 39 40 41] == step) % only plot these steps
+if any([0 1 2 5 10 17 26 34 37 38 39 40 41] == step) % only plot these steps
 
-    res = 100;
+    res = 800;
     
     disp(['plotting step ', num2str(step)])
 
     plot_gauss_mix(mu, SIGMA, corners, 'res', res, 'kernel_indices', [16 334])
     
-    title(['two selecter kernels after EM step ', num2str(step)])
     
     hold on
     
@@ -23,7 +22,9 @@ if any([1 2 5 10 17 26 34 37 38 39 40 41] == step) % only plot these steps
              'units','normalized', ...
              'outerposition',[0 0 1 1]) % maximize before saving
 
-end
+    saveas(gcf, ['two_selected_kernels_01_after_EM_step_', num2str(step)], 'epsc')
+    close
 
 end
 
+end
