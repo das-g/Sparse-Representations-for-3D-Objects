@@ -36,6 +36,7 @@ start_sigma = max( dists(2, :) ) * start_sigma_factor;
 figure
 scatter(x(:,1), x(:,2))
 axis off
+axis equal
 hold on
 quiver(x(:,1),x(:,2),x_normals(:,1),x_normals(:,2),'color','black')
 hold off
@@ -51,6 +52,7 @@ plot_f(x, x_normals, ...
        'res', res)
 colorbar
 axis off
+axis equal
 hold on
 scatter(x(:,1),x(:,2),'.k')
 hold off
@@ -70,6 +72,7 @@ hold off
 plot_f(mu, x_normals, squeeze(SIGMA), corners, 'res',res)
 colorbar
 axis off
+axis equal
 hold on
 % quiver(mu(:,1),mu(:,2),mu_normals(:,1),mu_normals(:,2),'color','black')
 scatter(x(:,1),x(:,2),'.k')
@@ -118,12 +121,14 @@ SIGMA_reduced = SIGMA(:, coeff_L1ls_nonzero_idx, :, :);
 figure
 scatter(mu_reduced(:,1),mu_reduced(:,2),'r')
 axis off
+axis equal
 
 %% reconstruct the target function from the reduced data
 plot_approx(mu_reduced, mu_normals_reduced, SIGMA_reduced, ...
             coeff_L1ls_reduced, corners, 'res', res)
 colorbar
 axis off
+axis equal
 hold on
 scatter(x(:,1),x(:,2),'.k')
 hold off
