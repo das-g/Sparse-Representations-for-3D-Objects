@@ -1,9 +1,9 @@
 res = 800;
-filenamesnippet = 'organic_sub2';
-serialNo = '_2';
+filenamesnippet = 'mimi_sub2';
+serialNo = '_1';
 data = load(['../test/' filenamesnippet '.npoff']);
 x = data(:,1:2);
-x_normals = -data(:,3:4);
+x_normals = data(:,3:4);
 
 [n dim] = size(x);
 corners = [min(x); max(x)];
