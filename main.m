@@ -1,6 +1,6 @@
 res = 800;
 filenamesnippet = 'mimi_sub2';
-serialNo = '_1';
+serialNo = '_2';
 data = load(['../test/' filenamesnippet '.npoff']);
 x = data(:,1:2);
 x_normals = data(:,3:4);
@@ -33,41 +33,41 @@ path(old_path)
 assert( all( dists(1, :) == 0) )
 start_sigma = max( dists(2, :) ) * start_sigma_factor;
 
-%% plot input
-figure
-scatter(x(:,1), x(:,2))
-axis off
-axis equal
-hold on
-quiver(x(:,1),x(:,2),x_normals(:,1),x_normals(:,2),'color','black')
-hold off
-set(gcf, 'PaperPositionMode', 'auto', ...
-         'units','normalized', ...
-         'outerposition',[0 0 1 1]) % maximize before saving
-saveas(gcf, [filenamesnippet serialNo '_input'], 'epsc')
-
-corners = [xlim' ylim'];
-
-%% plot surface definition (signed distance fu. based on input)
-plot_f(x, x_normals, ...
-       repmat(reshape(eye(dim) * start_sigma^2, ...
-                      [1 dim dim]), ...
-              [size(x,1) 1 1]), ...
-       corners, ...
-       'res', res)
-colorbar
-axis off
-axis equal
-hold on
-scatter(x(:,1),x(:,2),'.k')
-hold off
-set(gcf, 'PaperPositionMode', 'auto', ...
-         'units','normalized', ...
-         'outerposition',[0 0 1 1]) % maximize before saving
-saveas(gcf, [filenamesnippet serialNo '_signed_distance_fu'], 'epsc')
-% quiver(x(:,1),x(:,2),x_normals(:,1),x_normals(:,2),'color','black')
-% 
+% %% plot input
 % figure
+% scatter(x(:,1), x(:,2))
+% axis off
+% axis equal
+% hold on
+% quiver(x(:,1),x(:,2),x_normals(:,1),x_normals(:,2),'color','black')
+% hold off
+% set(gcf, 'PaperPositionMode', 'auto', ...
+%          'units','normalized', ...
+%          'outerposition',[0 0 1 1]) % maximize before saving
+% saveas(gcf, [filenamesnippet serialNo '_input'], 'epsc')
+% 
+% corners = [xlim' ylim'];
+
+% %% plot surface definition (signed distance fu. based on input)
+% plot_f(x, x_normals, ...
+%        repmat(reshape(eye(dim) * start_sigma^2, ...
+%                       [1 dim dim]), ...
+%               [size(x,1) 1 1]), ...
+%        corners, ...
+%        'res', res)
+% colorbar
+% axis off
+% axis equal
+% hold on
+% scatter(x(:,1),x(:,2),'.k')
+% hold off
+% set(gcf, 'PaperPositionMode', 'auto', ...
+%          'units','normalized', ...
+%          'outerposition',[0 0 1 1]) % maximize before saving
+% saveas(gcf, [filenamesnippet serialNo '_signed_distance_fu'], 'epsc')
+% % quiver(x(:,1),x(:,2),x_normals(:,1),x_normals(:,2),'color','black')
+% % 
+% % figure
 
 %% Run EM
 [mu SIGMA] = EM(x, ...
@@ -77,19 +77,19 @@ saveas(gcf, [filenamesnippet serialNo '_signed_distance_fu'], 'epsc')
                 'centers_to_points_ratio', 1, ...
                 'max_steps', 40);
 
-%% plot signed distance fu with new kernels from EM
-plot_f(mu, x_normals, squeeze(SIGMA), corners, 'res',res)
-colorbar
-axis off
-axis equal
-hold on
-% quiver(mu(:,1),mu(:,2),mu_normals(:,1),mu_normals(:,2),'color','black')
-scatter(x(:,1),x(:,2),'.k')
-hold off
-set(gcf, 'PaperPositionMode', 'auto', ...
-         'units','normalized', ...
-         'outerposition',[0 0 1 1]) % maximize before saving
-saveas(gcf, [filenamesnippet serialNo '_signed_distance_fu_after_EM'], 'epsc')
+% %% plot signed distance fu with new kernels from EM
+% plot_f(mu, x_normals, squeeze(SIGMA), corners, 'res',res)
+% colorbar
+% axis off
+% axis equal
+% hold on
+% % quiver(mu(:,1),mu(:,2),mu_normals(:,1),mu_normals(:,2),'color','black')
+% scatter(x(:,1),x(:,2),'.k')
+% hold off
+% set(gcf, 'PaperPositionMode', 'auto', ...
+%          'units','normalized', ...
+%          'outerposition',[0 0 1 1]) % maximize before saving
+% saveas(gcf, [filenamesnippet serialNo '_signed_distance_fu_after_EM'], 'epsc')
 
 %% Find approximately sparse coefficients with L1 minimization
 % Query points MUST be measurement points, reference points MUST be kernel centers,
@@ -121,7 +121,7 @@ path(old_path)
 assert(all(status == 'Solved'))
 
 %% sparsify (eliminate kernels corresponding to low coefficients)
-threshold = 1.4;
+threshold = 0.4;
 coeff_L1ls_nonzero_idx = abs(coeff_L1ls) > threshold; % vector of booleans
 
 coeff_L1ls_reduced = coeff_L1ls(coeff_L1ls_nonzero_idx);
