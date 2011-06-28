@@ -6,7 +6,7 @@ if any([0 1 2 5 10 17 26 34 37 38 39 40 41] == step) % only plot these steps
     
     disp(['plotting step ', num2str(step)])
 
-    plot_gauss_mix(mu, SIGMA, corners, 'res', res, 'kernel_indices', [16 334])
+    plot_gauss_mix(mu, SIGMA, corners, 'res', res, 'kernel_indices', [25 48])
     
     
     hold on
@@ -22,7 +22,7 @@ if any([0 1 2 5 10 17 26 34 37 38 39 40 41] == step) % only plot these steps
              'units','normalized', ...
              'outerposition',[0 0 1 1]) % maximize before saving
 
-    saveas(gcf, ['two_selected_kernels_01_after_EM_step_', num2str(step)], 'epsc')
+    saveas(gcf, ['two_selected_kernels_02_after_EM_step_', num2str(step)], 'epsc')
     close
 
 end

@@ -1,8 +1,6 @@
 res = 800;
 
-data = load('../test/organic_sub2.npoff');
-x = data(:,1:2);
-x_normals = -data(:,3:4);
+[x x_normals] = unit_square(50,1);
 
 [n dim] = size(x);
 corners = [min(x); max(x)];
@@ -40,13 +38,13 @@ axis equal
 hold on
 quiver(x(:,1),x(:,2),x_normals(:,1),x_normals(:,2),'color','black')
 
-scatter(x([16 334],1), x([16 334],2),'r','filled')
+scatter(x([25 48],1), x([25 48],2),'r','filled')
 
 hold off
 set(gcf, 'PaperPositionMode', 'auto', ...
          'units','normalized', ...
          'outerposition',[0 0 1 1]) % maximize before saving
-saveas(gcf, ['selected_kernels_01'], 'epsc')
+saveas(gcf, ['selected_kernels_02'], 'epsc')
 close
 
 %% plot initial kernel shapes
