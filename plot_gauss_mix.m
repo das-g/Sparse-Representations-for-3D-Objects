@@ -24,7 +24,7 @@ function [ ] = plot_gauss_mix( mu, SIGMA, corners, varargin )
 %
 %       y_res   height resolution of the plot, overrides res if given
 %
-%       x_indices
+%       kernel_indices
 %               (For debugging purposes.) If given, leave away all basis
 %               functions whose index is not listed in this parameter,
 %               otherwise plot the complete reconstruction.

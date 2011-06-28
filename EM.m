@@ -32,7 +32,7 @@ ip.addParamValue('initial_sigma', 1);
 ip.addParamValue('target_sigma', 1);
 ip.addParamValue('input_plot', @(x,SIGMA) []);
 ip.addParamValue('pre_plot', @(x,SIGMA) []);
-ip.addParamValue('step_plot', @(x,SIGMA) []);
+ip.addParamValue('step_plot', @(x,SIGMA,step) []);
 ip.addParamValue('post_plot', @(x,SIGMA) []);
 
 ip.parse(x, varargin{:});
@@ -78,7 +78,7 @@ for step=1:ip.Results.max_steps
             ./ (2 * ip.Results.a + n * repmat(pi_j,[1 1 dim dim]));
 
     %% Plot intermediate results
-    ip.Results.step_plot(mu,squeeze(SIGMA));
+    ip.Results.step_plot(mu,squeeze(SIGMA),step);
 end
 
 %% Plot final results
