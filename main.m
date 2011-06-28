@@ -117,6 +117,12 @@ mu_normals_reduced = mu_normals(coeff_L1ls_nonzero_idx, :);
 SIGMA_reduced = SIGMA(:, coeff_L1ls_nonzero_idx, :, :);
 
 
+%% plot kept points
+figure
+scatter(mu_reduced(:,1),mu_reduced(:,2),'r')
+set(gca,'XTick',[])
+set(gca,'YTick',[])
+
 %% reconstruct the target function from the reduced data
 plot_approx(mu_reduced, mu_normals_reduced, SIGMA_reduced, ...
             coeff_L1ls_reduced, corners, 'res', res)
@@ -126,9 +132,3 @@ set(gca,'YTick',[])
 hold on
 scatter(x(:,1),x(:,2),'.k')
 hold off
-
-%% plot kept points
-figure
-scatter(mu_reduced(:,1),mu_reduced(:,2),'r')
-set(gca,'XTick',[])
-set(gca,'YTick',[])
