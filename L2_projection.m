@@ -8,7 +8,7 @@ x_max = 25;
 x_measurement = (x_min:1:x_max)';
 x_reconstruct = (x_min:0.01:x_max)';
 
-mu = (x_min:1:x_max)';
+mu = (x_min:0.9:x_max)';
 SIGMA = 300;
 
 lambda = 0.001; % for l1_ls (weights |alpha|_L1 against || K alpha - f ||^2
@@ -77,12 +77,14 @@ subplot(2, 1, 1)
 plot(x_reconstruct, f_original, 'color', 'black', 'LineWidth', 3)
 hold on
 plot(x_reconstruct, f_reconstructed_L2, 'color', 'red')
+plot(x_reconstruct, f_reconstructed_L2_reduced, 'color', 'magenta')
 % plot(x_reconstruct, f_reconstructed_L1eq, 'color', 'green')
 % plot(x_reconstruct, f_reconstructed_L1qc, 'color', 'blue')
 plot(x_reconstruct, f_reconstructed_L1ls, 'color', 'cyan')
 plot(x_reconstruct, f_reconstructed_L1ls_reduced, 'color', 'blue')
 legend('f = x^2/100', ...
        'reconstructed f (from all L2 coeffs.)', ...
+       ['reconstructed f (from ' num2str(S) ' largest L2 coeffs.)'], ...
        'reconstructed f (from all L1 coeffs.)', ...
        ['reconstructed f (from ' num2str(S) ' largest L1 coeffs.)'])
 hold off
@@ -91,7 +93,7 @@ hold off
 subplot(2, 1, 2)
 plot(x_reconstruct, f_reconstructed_L2 - f_original, 'color', 'red')
 hold on
-plot(x_reconstruct, (f_reconstructed_L2_reduced - f_original) * 1e-9, 'color', 'magenta')
+plot(x_reconstruct, f_reconstructed_L2_reduced - f_original, 'color', 'magenta')
 % plot(x_reconstruct, f_reconstructed_L1eq - f_original, 'color', 'green')
 % plot(x_reconstruct, f_reconstructed_L1qc - f_original, 'color', 'blue')
 plot(x_reconstruct, f_reconstructed_L1ls - f_original, 'color', 'cyan')
@@ -99,7 +101,7 @@ plot(x_reconstruct, f_reconstructed_L1ls_reduced - f_original, 'color', 'blue')
 hold off
 title('error')
 legend(['error using all ' num2str(numel(alpha_L2)) ' L2 coefficients'], ...
-       ['error \cdot 10^{-9} using ' num2str(S) ' largest L2 coefficients'], ...
+       ['error using ' num2str(S) ' largest L2 coefficients'], ...
        ['error using all ' num2str(numel(alpha_L2)) ' L1 coefficients'], ...
        ['error using ' num2str(S) ' largest L1 coefficients'])
 
