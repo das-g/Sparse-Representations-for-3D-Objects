@@ -12,6 +12,7 @@ mu = (x_min:1:x_max)';
 SIGMA = 300;
 
 lambda = 0.001; % for l1_ls (weights |alpha|_L1 against || K alpha - f ||^2
+threshold = 1;
 
 %% prepare search path
 % save path before we manipulate it (for restoring it later)
@@ -51,7 +52,7 @@ alpha_L2 = K_measurement \ f_measured;
 [alpha_L1ls status] = l1_ls(K_measurement, f_measured, lambda, 1e-3);
 assert(all(status == 'Solved'))
 
-alpha_L1ls = alpha_L1ls .* (abs(alpha_L1ls) > 1);
+alpha_L1ls = alpha_L1ls .* (abs(alpha_L1ls) > threshold);
 
 %% reconstruct f
 f_reconstructed_L2 = K_reconstruct * alpha_L2;
