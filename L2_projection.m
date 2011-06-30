@@ -18,7 +18,7 @@ threshold = 1;
 % save path before we manipulate it (for restoring it later)
 old_path = path;
 
-% addpath want absolute paths, so prepend pwd/
+% addpath wants absolute paths, so prepend pwd/
 addpath([pwd '/../l1magic-1.1/Optimization'])
 addpath([pwd '/../l1_ls_matlab'])
 
@@ -65,7 +65,7 @@ f_original = f(x_reconstruct); % actual value of f at reconstruction points
 
 %% Plot original and reconstructed f in upper half
 subplot(2, 1, 1)
-plot(x_reconstruct, f_original, 'color', 'black')
+plot(x_reconstruct, f_original, 'color', 'black', 'LineWidth', 3)
 hold on
 plot(x_reconstruct, f_reconstructed_L2, 'color', 'red')
 % plot(x_reconstruct, f_reconstructed_L1eq, 'color', 'green')
@@ -73,7 +73,7 @@ plot(x_reconstruct, f_reconstructed_L2, 'color', 'red')
 plot(x_reconstruct, f_reconstructed_L1ls, 'color', 'cyan')
 legend('f', ...
        'reconstructed f (from L2)', ...
-       'reconstructed f (from L1 large scale)')
+       'reconstructed f (from L1)')
 hold off
 
 %% Plot error in lower half
