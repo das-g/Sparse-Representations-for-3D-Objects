@@ -1,6 +1,24 @@
 function [ mu SIGMA ] = EM( x, varargin)
-%EM Summary of this function goes here
-%   Detailed explanation goes here
+% Compute kernels of a multivariate guassian mixture approximating a point
+% cloud, using a modified estimation maximization algorithm.
+%
+% [mu, SIGMA] = EM(x)
+%
+% Input:
+%       x   n-by-d array, positions of points in point cloud
+%
+% Outputs:
+%       mu  n-by-d array, positions of kernels
+%
+%       SIGMA
+%           n-by-d-by-d array; SIGMA(j,:,:) is the covariance matrix
+%           corresponding to the jth kernel. A valid covariance matrix must
+%           be positive-semidefinite. There will be no warning when the
+%           passed matrices aren't.
+%
+% EM also takes a set of optional arguments as 'name',value pairs.
+%
+% See also: plot_gauss_mix, gauss_mix_eval
 
 %% Parse input arguments
 ip = inputParser;
@@ -14,18 +32,18 @@ ip.addParamValue('initial_sigma', 1);
 ip.addParamValue('target_sigma', 1);
 ip.addParamValue('input_plot', @(x,SIGMA) []);
 ip.addParamValue('pre_plot', @(x,SIGMA) []);
-ip.addParamValue('step_plot', @(x,SIGMA) []);
+ip.addParamValue('step_plot', @(x,SIGMA,step) []);
 ip.addParamValue('post_plot', @(x,SIGMA) []);
 
 ip.parse(x, varargin{:});
 
 %% Derived values that aren't changed during the iteration
-[n dim] = size(x)
+[n dim] = size(x);
 
 S_x = eye(dim) * ip.Results.target_sigma^2;
 
 %% Iteration Start Values
-p = round(n * ip.Results.centers_to_points_ratio)
+p = round(n * ip.Results.centers_to_points_ratio);
 if p < n
     % select random subset of input points as initial centers
     random_order = randperm(n);
@@ -55,12 +73,12 @@ for step=1:ip.Results.max_steps
     %mu = (pi_ij' * x) ./ repmat(n * pi_j', [1 dim]);
     tmp = repmat(reshape(x,[n 1 dim]),[1 p 1]) ...
         - repmat(shiftdim(mu,-1),[n 1 1]);
-    S_j = dot(repmat(repmat(pi_ij, [1 1 2]) .* tmp,[1 1 1 2]),repmat(reshape(tmp,[n p 1 dim]),[1 1 2 1]), 1);
+    S_j = dot(repmat(repmat(pi_ij, [1 1 dim]) .* tmp,[1 1 1 dim]),repmat(reshape(tmp,[n p 1 dim]),[1 1 dim 1]), 1);
     SIGMA = (2 * ip.Results.a * repmat(shiftdim(S_x,-2),[1 p 1 1]) + S_j) ...
             ./ (2 * ip.Results.a + n * repmat(pi_j,[1 1 dim dim]));
 
     %% Plot intermediate results
-    ip.Results.step_plot(mu,squeeze(SIGMA));
+    ip.Results.step_plot(mu,squeeze(SIGMA),step);
 end
 
 %% Plot final results

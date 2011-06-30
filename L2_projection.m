@@ -1,3 +1,5 @@
+% Script for testing L1 minimization libraries.
+
 %% inputs
 f = @(x) (x.*x/100);
 

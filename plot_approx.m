@@ -1,8 +1,8 @@
-function [ ] = plot_f( x, normals, SIGMA, corners, varargin )
-% Plot weighted signed distance function given by points x and covariance
-% matrices SIGMA
+function [ ] = plot_approx( x, normals, SIGMA, coeffs, corners, varargin )
+% plot approximated function given by coefficients coeffs given by points x
+% and covariance matrices SIGMA
 %
-%   PLOT_F(x, normals, SIGMA, corners)
+%   PLOT_APPROX(x, normals, SIGMA, coeffs, corners)
 %
 %       x       is a n-by-d matrix where each of the n rows represents the
 %               (d-dimensional) position of a center
@@ -13,15 +13,18 @@ function [ ] = plot_f( x, normals, SIGMA, corners, varargin )
 %
 %       SIGMA   is a n-by-d-by-d array where SIGMA(i,:,:) is the d-by-d
 %               covariance matrix corresponding to the i-th point. A valid
-%               covariance matrix must be positive-semidifinite. There will
+%               covariance matrix must be positive-semidefinite. There will
 %               be no warning when the passed matrices aren't.
+%
+%       coeffs  is a n-by-1 array contaning coefficients for weighting
+%               each basis function
 %
 %       corners matrix indicating the boundary of the area to be plotted.
 %               Structure: [ <left edge> , <lower edge>;
 %                            <right edge>, <upper edge>  ]
 %
-%   PLOT_F takes the following optional arguments as 'name',value pairs,
-%   after the mandatory parameters:
+%   PLOT_APPROX takes the following optional arguments as
+%   'name',value pairs, after the mandatory parameters:
 %
 %       res     height and width resolution of the plot; default: 100
 %
@@ -34,7 +37,7 @@ function [ ] = plot_f( x, normals, SIGMA, corners, varargin )
 %               functions whose index is not listed in this parameter,
 %               otherwise plot the complete reconstruction.
 %
-% See also: weighted_signed_distance_fu, plot_gauss_mix, plot_approx
+% See also: plot_gauss_mix, EM
 
 %% Parse input arguments
 ip = inputParser;
@@ -42,6 +45,7 @@ ip = inputParser;
 ip.addRequired('x');
 ip.addRequired('normals');
 ip.addRequired('SIGMA');
+ip.addRequired('coeffs');
 ip.addRequired('corners');
 
 ip.addParamValue('res', 100);
@@ -49,7 +53,7 @@ ip.addParamValue('x_res', false);
 ip.addParamValue('y_res', false);
 ip.addParamValue('x_indices', false);
 
-ip.parse(x, normals, SIGMA, corners, varargin{:});
+ip.parse(x, normals, SIGMA, coeffs, corners, varargin{:});
 
 %% Post-process input arguments
 if any(strcmpi('x_res', ip.UsingDefaults))
@@ -74,7 +78,9 @@ end
                   linspace(corners(1,2), corners(2,2), y_res) );
 
 %% Evaluate function for coordinates
-Z = weighted_signed_distance_fu(x, normals, SIGMA, [X(:) Y(:)]);
+A = measurement_matrix(x, normals, SIGMA, [X(:) Y(:)], ...
+    'compile', true ); % compile value generation code
+Z = A * coeffs;
 
 %% Deserialize function values
 Z = reshape(Z, y_res, x_res);
